@@ -1,12 +1,16 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import * as React from 'react';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import * as React from "react";
 
-import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import TabBarIcon from "../components/TabBarIcon";
+import HomeScreen from "../screens/HomeScreen";
+import ScheduleScreen from "../screens/ScheduleScreen";
+import MapScreen from "../screens/MapScreen";
+import FoodScreen from "../screens/FoodScreen";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Colors from "../constants/Colors";
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'Home';
+const INITIAL_ROUTE_NAME = "Home";
 
 export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
@@ -15,21 +19,55 @@ export default function BottomTabNavigator({ navigation, route }) {
   navigation.setOptions({ headerTitle: getHeaderTitle(route) });
 
   return (
-    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+    <BottomTab.Navigator
+      initialRouteName={INITIAL_ROUTE_NAME}
+      tabBarOptions={{
+        showLabel: false,
+        activeTintColor: Colors.tabIconSelected,
+      }}
+    >
       <BottomTab.Screen
         name="Home"
         component={HomeScreen}
         options={{
-          title: 'Get Started',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="home" color={color} size={size} />
+          ),
         }}
       />
       <BottomTab.Screen
-        name="Links"
-        component={LinksScreen}
+        name="Schedule"
+        component={ScheduleScreen}
         options={{
-          title: 'Resources',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="calendar-text"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Map"
+        component={MapScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="map" color={color} size={size} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Food"
+        component={FoodScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="silverware-fork-knife"
+              color={color}
+              size={size}
+            />
+          ),
         }}
       />
     </BottomTab.Navigator>
@@ -37,12 +75,13 @@ export default function BottomTabNavigator({ navigation, route }) {
 }
 
 function getHeaderTitle(route) {
-  const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
+  const routeName =
+    route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 
   switch (routeName) {
-    case 'Home':
-      return 'How to get started';
-    case 'Links':
-      return 'Links to learn more';
+    case "Home":
+      return "How to get started";
+    case "Links":
+      return "Links to learn more";
   }
 }
