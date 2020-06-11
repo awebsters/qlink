@@ -18,6 +18,9 @@ export default function useCachedResources() {
           ...Ionicons.font,
           "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf"),
           "nunito-black": require("../assets/fonts/Nunito-Black.ttf"),
+          "nunito-semibolditalic": require("../assets/fonts/Nunito-SemiBoldItalic.ttf"),
+          "nunito-bold": require("../assets/fonts/Nunito-Bold.ttf"),
+          "nunito-regular": require("../assets/fonts/Nunito-Regular.ttf"),
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service
