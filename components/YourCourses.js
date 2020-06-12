@@ -23,11 +23,6 @@ export default class NextClass extends Component {
   };
 
   Item({ code, image }) {
-    //<View style={styles.container}>
-    //     {/* <Text style={styles.text}>{code}</Text> */}
-    //     <ImageBackground style={styles.image} source={{ uri: image }} blurRadius={1} />
-    //     <Text style={styles.text}>{code}</Text>
-    //   </View>
     return (
       <View style={styles.container}>
         <ImageBackground
