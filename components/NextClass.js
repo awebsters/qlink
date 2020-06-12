@@ -64,23 +64,23 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontFamily: "nunito-bold",
+    fontFamily: "poppins-medium",
     fontSize: 24,
     color: Colors.paragraph,
   },
   subtitle: {
-    fontFamily: "nunito-regular",
+    fontFamily: "poppins-regular",
     fontSize: 14,
     color: Colors.paragraph,
   },
   time: {
-    fontFamily: "nunito-regular",
+    fontFamily: "poppins-regular",
     fontSize: 14,
     color: Colors.paragraph,
     paddingTop: 50,
   },
   room: {
-    fontFamily: "nunito-regular",
+    fontFamily: "poppins-regular",
     fontSize: 14,
     color: Colors.paragraph,
   },

@@ -6,6 +6,7 @@ import {
   Image,
   FlatList,
   ImageBackground,
+  Platform,
 } from "react-native";
 
 import Colors from "../constants/Colors";
@@ -29,7 +30,12 @@ export default class NextClass extends Component {
     //   </View>
     return (
       <View style={styles.container}>
-        <ImageBackground source={{ uri: image }} style={styles.image}>
+        <ImageBackground
+          source={{ uri: image }}
+          style={styles.image}
+          blurRadius={Platform.OS === "android" ? 1 : 5}
+          borderRadius={20}
+        >
           <Text style={styles.paragraph}>{code}</Text>
         </ImageBackground>
       </View>
@@ -66,12 +72,11 @@ const styles = StyleSheet.create({
     width: 100,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 20,
   },
   paragraph: {
     textAlign: "center",
     fontSize: 18,
-    fontFamily: "nunito-regular",
+    fontFamily: "poppins-regular",
     color: "white",
   },
 });

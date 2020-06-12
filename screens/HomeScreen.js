@@ -1,5 +1,5 @@
 import * as WebBrowser from "expo-web-browser";
-import * as React from "react";
+import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   Image,
@@ -58,17 +58,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontFamily: "nunito-black",
+    fontFamily: "poppins-medium",
     fontSize: 30,
   },
   date: {
-    fontFamily: "nunito-semibolditalic",
+    fontFamily: "poppins-mediumitalic",
     fontSize: 18,
     color: Colors.header,
     paddingTop: 10,
   },
   header: {
-    fontFamily: "nunito-bold",
+    fontFamily: "poppins-medium",
     fontSize: 24,
     color: Colors.header,
     paddingTop: 30,
