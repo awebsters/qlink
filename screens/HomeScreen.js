@@ -14,6 +14,7 @@ import moment from "moment";
 
 import Colors from "../constants/Colors";
 import NextClass from "../components/NextClass";
+import YourClass from "../components/YourCourses";
 
 export default function HomeScreen() {
   return (
@@ -29,10 +30,10 @@ export default function HomeScreen() {
               {moment().format("dddd, MMMM Do, YYYY")}
             </Text>
             <Text style={styles.header}>Next Class</Text>
+            <NextClass style={styles.content_section} paddingTop={30} />
 
-            {/* Next Class Component */}
-            <NextClass style={styles.nextClass} paddingTop={30} />
             <Text style={styles.header}>Your Courses</Text>
+            <YourClass style={styles.content_section} />
           </View>
         </LinearGradient>
       </ScrollView>
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
 
-  nextClass: {
+  content_section: {
     paddingTop: 20,
   },
 });
