@@ -7,9 +7,15 @@ import {
   FlatList,
   ImageBackground,
   Platform,
+  Modal,
 } from "react-native";
 
 import Colors from "../constants/Colors";
+import {
+  TouchableOpacity,
+  TouchableHighlight,
+} from "react-native-gesture-handler";
+import CourseModal from "./modals/CourseModal";
 
 export default class NextClass extends Component {
   state = {
@@ -20,29 +26,46 @@ export default class NextClass extends Component {
       { id: "4", image: "https://picsum.photos/300/300", code: "PHIL 101" },
       { id: "5", image: "https://picsum.photos/300/300", code: "CISC 235" },
     ],
+    isModalVisible: false,
+    selectedItem: null,
   };
 
-  Item({ code, image }) {
+  _hideModal = () => this.setState({ isModalVisible: false });
+
+  _showModal = (item) =>
+    this.setState({ isModalVisible: true, selectedItem: item });
+
+  Item(item) {
     return (
       <View style={styles.container}>
-        <ImageBackground
-          source={{ uri: image }}
-          style={styles.image}
-          blurRadius={Platform.OS === "android" ? 1 : 5}
-          borderRadius={20}
-        >
-          <Text style={styles.paragraph}>{code}</Text>
-        </ImageBackground>
+        <TouchableOpacity onPress={() => this._showModal(item)}>
+          <ImageBackground
+            source={{ uri: item.image }}
+            style={styles.image}
+            blurRadius={Platform.OS === "android" ? 1 : 5}
+            borderRadius={20}
+          >
+            <Text style={styles.paragraph}>{item.code}</Text>
+          </ImageBackground>
+        </TouchableOpacity>
       </View>
     );
   }
 
   render() {
-    const { data } = this.state;
+    const { data, selectedItem, isModalVisible } = this.state;
     const { style } = this.props;
 
     return (
       <View style={style}>
+        {selectedItem != null && (
+          <CourseModal
+            selectedItem={selectedItem}
+            modalVisible={isModalVisible}
+            onDismiss={this._hideModal}
+          ></CourseModal>
+        )}
+
         <FlatList
           horizontal={true}
           data={data}
