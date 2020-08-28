@@ -1,43 +1,42 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
-import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import { Provider } from "react-redux";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { PersistGate } from "redux-persist/integration/react";
 
 import useCachedResources from "./hooks/useCachedResources";
-import BottomTabNavigator from "./navigation/BottomTabNavigator";
-import LinkingConfiguration from "./navigation/LinkingConfiguration";
-import Login from "./Login";
+import { store, persistor } from "./data/store";
+import Navigator from "./Navigator";
 
 const Stack = createStackNavigator();
 
 export default function App(props) {
   const isLoadingComplete = useCachedResources();
-  loggedIn = true;
+
+  renderLoading = () => (
+    <View style={styles.container}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
 
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
-      <NavigationContainer linking={LinkingConfiguration}>
-        <Stack.Navigator headerMode="none">
-          {loggedIn == false ? (
-            // No token found, user isn't signed in
-            <Stack.Screen
-              name="SignIn"
-              component={Login}
-              options={{
-                title: "Sign in",
-                // When logging out, a pop animation feels intuitive
-                // You can remove this if you want the default 'push' animation
-              }}
-            />
-          ) : (
-            // User is signed in
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
+      <Provider store={store}>
+        <PersistGate loading={renderLoading()} persistor={persistor}>
+          <Navigator Stack={Stack} />
+        </PersistGate>
+      </Provider>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
