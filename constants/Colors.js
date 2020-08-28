@@ -14,4 +14,7 @@ export default {
   warningText: "#666804",
   noticeBackground: tintColor,
   noticeText: "#fff",
+
+  loginPrimary: "#e1b2ff",
+  loginSecondary: "#00c5f0",
 };
