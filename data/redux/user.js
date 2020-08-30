@@ -1,20 +1,23 @@
-export const UPDATE_USERNAME = "UPDATE_USERNAME";
+export const LOGIN_USER = "LOGIN_USER";
 
-export const updateUsername = (username) => ({
-  type: UPDATE_USERNAME,
-  username,
+export const updateLogin = (username, password) => ({
+  type: LOGIN_USER,
+  username: username,
+  password: password,
 });
 
 const initialState = {
   username: "",
+  password: "",
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case UPDATE_USERNAME:
+    case LOGIN_USER:
       return {
         ...state,
-        username: action.payload,
+        username: action.username,
+        password: action.password,
       };
     default:
       return state;

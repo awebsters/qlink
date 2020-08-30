@@ -1,16 +1,20 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
 
 import LinkingConfiguration from "./navigation/LinkingConfiguration";
 import Login from "./Login";
 import BottomTabNavigator from "./navigation/BottomTabNavigator";
 
-export default class Navigator extends Component {
-  state = { loggedIn: false };
+const mapStateToProps = (state) => {
+  return {
+    loggedIn: state.user.username != "" && state.user.password != "",
+  };
+};
 
+class Navigator extends Component {
   render() {
-    const { loggedIn } = this.state;
-    const { Stack } = this.props;
+    const { Stack, loggedIn } = this.props;
     return (
       <NavigationContainer linking={LinkingConfiguration}>
         <Stack.Navigator headerMode="none">
@@ -34,3 +38,5 @@ export default class Navigator extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(Navigator);

@@ -6,16 +6,28 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-
+import { connect } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 
+import { updateLogin } from "./data/redux/user";
 import Colors from "./constants/Colors";
 
-export default class Login extends React.Component {
+const mapStateToProps = (state) => {
+  return {};
+};
+
+class Login extends React.Component {
   state = {
     email: "",
     password: "",
   };
+
+  login = () => {
+    const { dispatch } = this.props;
+
+    dispatch(updateLogin(this.state.email, this.state.password));
+  };
+
   render() {
     return (
       <LinearGradient
@@ -41,20 +53,16 @@ export default class Login extends React.Component {
               onChangeText={(text) => this.setState({ password: text })}
             />
           </View>
-          <TouchableOpacity>
-            <Text style={styles.forgot}>Forgot Password?</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.loginBtn}>
+          <TouchableOpacity style={styles.loginBtn} onPress={this.login}>
             <Text style={styles.loginText}>LOGIN</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={styles.loginText}>Signup</Text>
           </TouchableOpacity>
         </View>
       </LinearGradient>
     );
   }
 }
+
+export default connect(mapStateToProps)(Login);
 
 const styles = StyleSheet.create({
   container: {
