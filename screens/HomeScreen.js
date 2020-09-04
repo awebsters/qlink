@@ -9,14 +9,37 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
+import { useDispatch } from "react-redux";
 import { ScrollView } from "react-native-gesture-handler";
 import moment from "moment";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  Menu,
+  MenuProvider,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from "react-native-popup-menu";
 
 import Colors from "../constants/Colors";
 import NextClass from "../components/NextClass";
 import YourClass from "../components/YourCourses";
+import { updateLogin } from "../data/redux/user";
 
 export default function HomeScreen() {
+  const dispatch = useDispatch();
+
+  accountMenuHandler = (value) => {
+    if (value === "Logout") {
+      this.logout();
+    }
+  };
+
+  logout = () => {
+    dispatch(updateLogin("", ""));
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flex: 1 }}>
@@ -26,6 +49,28 @@ export default function HomeScreen() {
         >
           <View style={styles.content}>
             <Text style={styles.title}>Home</Text>
+            <MenuProvider style={styles.account}>
+              <Menu onSelect={(value) => accountMenuHandler(value)}>
+                <MenuTrigger>
+                  <MaterialCommunityIcons
+                    name="account-box"
+                    color="black"
+                    size={35}
+                  />
+                </MenuTrigger>
+
+                <MenuOptions
+                  customStyles={{
+                    optionsContainer: { marginTop: 30, width: null },
+                  }}
+                >
+                  <MenuOption value={"Logout"}>
+                    <Text style={styles.menuContent}>Logout</Text>
+                  </MenuOption>
+                </MenuOptions>
+              </Menu>
+            </MenuProvider>
+
             <Text style={styles.date}>
               {moment().format("dddd, MMMM Do, YYYY")}
             </Text>
@@ -60,6 +105,20 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "poppins-medium",
     fontSize: 30,
+    zIndex: 1,
+    position: "absolute",
+    top: 30,
+    left: 10,
+    height: null,
+  },
+
+  // TODO: Why is absolute positions being relative the textbox when the parent is the gradient??
+  account: {
+    flexDirection: "column",
+    position: "absolute",
+    top: 5,
+    right: 0,
+    zIndex: 2,
   },
   date: {
     fontFamily: "poppins-mediumitalic",
@@ -73,7 +132,6 @@ const styles = StyleSheet.create({
     color: Colors.header,
     paddingTop: 30,
   },
-
   content_section: {
     paddingTop: 20,
   },
