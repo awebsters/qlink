@@ -1,10 +1,17 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Modal, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Modal,
+  Image,
+  TouchableWithoutFeedback,
+} from "react-native";
 
 import Colors from "../../constants/Colors";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { BlurView } from "@react-native-community/blur";
 
-import { BlurView } from "expo-blur";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default class CourseModal extends Component {
@@ -12,31 +19,22 @@ export default class CourseModal extends Component {
     const { selectedItem } = this.props;
 
     return (
-      <View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.props.modalVisible}
-          onRequestClose={() => {
-            this.props.onDismiss();
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => {
-              console.log("here");
-              this.props.onDismiss();
-            }}
-            style={{ backgroundColor: "red" }}
-          >
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={this.props.modalVisible}
+        onRequestClose={() => {
+          this.props.onDismiss();
+        }}
+      >
+        <TouchableWithoutFeedback onPress={this.props.onDismiss}>
+          <View style={styles.container}>
             <MaterialCommunityIcons
               style={styles.close}
               name="close"
               color="white"
               size={40}
             />
-          </TouchableOpacity>
-
-          <View style={styles.container}>
             <View style={styles.innerContainer}>
               <Image
                 style={styles.image}
@@ -61,16 +59,23 @@ export default class CourseModal extends Component {
                   </View>
                 </View>
                 <View style={styles.times}>
-                  <Text style={styles.info_text}>{"Monday\nTuesday"}</Text>
+                  <MaterialCommunityIcons name="alarm" size={25} />
                   <Text style={styles.info_text}>
-                    {"6:30pm - 9:30pm\n9:30pm - 10:30pm"}
+                    {selectedItem.days.join("\n")}
                   </Text>
+                  <Text style={styles.info_text}>
+                    {selectedItem.times.join("\n")}
+                  </Text>
+                </View>
+                <View style={styles.location}>
+                  <MaterialCommunityIcons name="map-marker" size={25} />
+                  <Text style={styles.info_text}>{selectedItem.location}</Text>
                 </View>
               </View>
             </View>
           </View>
-        </Modal>
-      </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     );
   }
 }
@@ -80,7 +85,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "transparent",
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
   },
   innerContainer: {
     borderRadius: 10,
@@ -89,7 +94,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    paddingBottom: 20,
+    paddingBottom: 30,
   },
   close: {
     position: "absolute",
@@ -124,11 +129,20 @@ const styles = StyleSheet.create({
 
   times: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
+    paddingLeft: 30,
+    paddingRight: 30,
+  },
+  location: {
+    paddingTop: 30,
+    paddingLeft: 30,
+    paddingRight: 30,
+    flexDirection: "row",
   },
   info_text: {
     fontSize: 15,
     fontFamily: "poppins-regular",
     color: Colors.header,
+    paddingLeft: 20,
   },
 });

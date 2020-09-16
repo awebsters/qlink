@@ -20,11 +20,56 @@ import CourseModal from "./modals/CourseModal";
 export default class NextClass extends Component {
   state = {
     data: [
-      { id: "1", image: "https://picsum.photos/300/300", code: "COMM 200" },
-      { id: "2", image: "https://picsum.photos/300/300", code: "CISC 204" },
-      { id: "3", image: "https://picsum.photos/300/300", code: "ARTH 253" },
-      { id: "4", image: "https://picsum.photos/300/300", code: "PHIL 101" },
-      { id: "5", image: "https://picsum.photos/300/300", code: "CISC 235" },
+      {
+        id: "1",
+        course: {
+          image: "https://picsum.photos/300/300",
+          code: "COMM 200",
+          location: "Goodes RM 108",
+          days: ["Monday", "Tuesday"],
+          times: ["6:30pm - 9:30pm", "9:30pm - 10:30pm"],
+        },
+      },
+      {
+        id: "2",
+        course: {
+          image: "https://picsum.photos/300/300",
+          code: "CISC 204",
+          location: "Goodes RM 108",
+          days: ["Monday", "Tuesday"],
+          times: ["6:30pm - 9:30pm", "9:30pm - 10:30pm"],
+        },
+      },
+      {
+        id: "3",
+        course: {
+          image: "https://picsum.photos/300/300",
+          code: "ARTH 253",
+          location: "Goodes RM 108",
+          days: ["Monday", "Tuesday"],
+          times: ["6:30pm - 9:30pm", "9:30pm - 10:30pm"],
+        },
+      },
+      {
+        id: "4",
+        course: {
+          image: "https://picsum.photos/300/300",
+          code: "PHIL 101",
+          location: "Goodes RM 108",
+          days: ["Monday", "Tuesday"],
+          times: ["6:30pm - 9:30pm", "9:30pm - 10:30pm"],
+        },
+      },
+      {
+        id: "5",
+        course: {
+          image: "https://picsum.photos/300/300",
+          code: "CISC 253",
+          location: "Goodes RM 108",
+          days: ["Monday", "Tuesday"],
+          times: ["6:30pm - 9:30pm", "9:30pm - 10:30pm"],
+        },
+      },
     ],
     isModalVisible: false,
     selectedItem: null,
@@ -38,14 +83,14 @@ export default class NextClass extends Component {
   Item(item) {
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => this._showModal(item)}>
+        <TouchableOpacity onPress={() => this._showModal(item.course)}>
           <ImageBackground
-            source={{ uri: item.image }}
+            source={{ uri: item.course.image }}
             style={styles.image}
             blurRadius={Platform.OS === "android" ? 1 : 5}
             borderRadius={20}
           >
-            <Text style={styles.paragraph}>{item.code}</Text>
+            <Text style={styles.paragraph}>{item.course.code}</Text>
           </ImageBackground>
         </TouchableOpacity>
       </View>
