@@ -1,20 +1,13 @@
 import React, { Component } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
   FlatList,
   ImageBackground,
   Platform,
-  Modal,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
-
-import Colors from "../constants/Colors";
-import {
-  TouchableOpacity,
-  TouchableHighlight,
-} from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import CourseModal from "./modals/CourseModal";
 
 export default class NextClass extends Component {

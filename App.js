@@ -1,11 +1,10 @@
-import React from "react";
-import { Provider } from "react-redux";
-import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
+import React from "react";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-
+import { persistor, store } from "./data/store";
 import useCachedResources from "./hooks/useCachedResources";
-import { store, persistor } from "./data/store";
 import Navigator from "./Navigator";
 
 const Stack = createStackNavigator();

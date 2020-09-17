@@ -1,12 +1,11 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
-
-import HomeScreen from "../screens/HomeScreen";
-import ScheduleScreen from "../screens/ScheduleScreen";
-import MapScreen from "../screens/MapScreen";
-import FoodScreen from "../screens/FoodScreen";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
+import FoodScreen from "../screens/FoodScreen";
+import HomeScreen from "../screens/HomeScreen";
+import MapScreen from "../screens/MapScreen";
+import ScheduleScreen from "../screens/ScheduleScreen";
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = "Home";

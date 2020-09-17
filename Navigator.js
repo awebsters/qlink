@@ -1,10 +1,9 @@
+import { NavigationContainer } from "@react-navigation/native";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { NavigationContainer } from "@react-navigation/native";
-
-import LinkingConfiguration from "./navigation/LinkingConfiguration";
 import Login from "./Login";
 import BottomTabNavigator from "./navigation/BottomTabNavigator";
+import LinkingConfiguration from "./navigation/LinkingConfiguration";
 
 const mapStateToProps = (state) => {
   return {

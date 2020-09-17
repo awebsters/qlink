@@ -1,16 +1,15 @@
+import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import {
   StyleSheet,
   Text,
-  View,
   TextInput,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { connect } from "react-redux";
-import { LinearGradient } from "expo-linear-gradient";
-
-import { updateLogin } from "./data/redux/user";
 import Colors from "./constants/Colors";
+import { updateLogin } from "./data/redux/user";
 
 const mapStateToProps = (state) => {
   return {};

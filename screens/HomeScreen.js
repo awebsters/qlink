@@ -1,30 +1,14 @@
-import * as WebBrowser from "expo-web-browser";
-import React from "react";
-import { LinearGradient } from "expo-linear-gradient";
-import {
-  Image,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-
-import { useDispatch } from "react-redux";
-import { ScrollView } from "react-native-gesture-handler";
-import moment from "moment";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import {
-  Menu,
-  MenuProvider,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-} from "react-native-popup-menu";
-
-import Colors from "../constants/Colors";
+import { LinearGradient } from "expo-linear-gradient";
+import moment from "moment";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { useDispatch } from "react-redux";
 import NextClass from "../components/NextClass";
 import YourClass from "../components/YourCourses";
+import CampusNowList from "../components/CampusNowList";
+import Colors from "../constants/Colors";
 import { updateLogin } from "../data/redux/user";
 
 export default function HomeScreen() {
@@ -79,6 +63,9 @@ export default function HomeScreen() {
 
           <Text style={styles.header}>Your Courses</Text>
           <YourClass style={styles.content_section} />
+
+          <Text style={styles.header}>Campus Right Now</Text>
+          <CampusNowList style={styles.content_section} />
         </ScrollView>
       </LinearGradient>
     </View>

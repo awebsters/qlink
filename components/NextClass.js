@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
-
+import { Image, StyleSheet, Text, View } from "react-native";
 import Colors from "../constants/Colors";
 
 export default class NextClass extends Component {
