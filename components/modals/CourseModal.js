@@ -9,8 +9,6 @@ import {
 } from "react-native";
 
 import Colors from "../../constants/Colors";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { BlurView } from "@react-native-community/blur";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 

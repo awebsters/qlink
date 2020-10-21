@@ -17,7 +17,7 @@ import {
 } from "react-native-gesture-handler";
 import CourseModal from "./modals/CourseModal";
 
-export default class NextClass extends Component {
+export default class YourCourses extends Component {
   state = {
     data: [
       {
