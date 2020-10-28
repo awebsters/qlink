@@ -22,7 +22,10 @@ export default class ScheduleScreen extends Component {
       return (
         <TouchableOpacity
           onPress={() => {
-            this.setState({ ...this.state, selectedDay: date });
+            this.setState({
+              ...this.state,
+              selectedDay: date,
+            });
           }}
         >
           <View
@@ -31,7 +34,7 @@ export default class ScheduleScreen extends Component {
                 date.format("YYYY-MM-DD") ==
                 this.state.selectedDay.format("YYYY-MM-DD")
                   ? "white"
-                  : "clear",
+                  : "transparent",
               borderRadius: 20,
               padding: 5,
             }}
