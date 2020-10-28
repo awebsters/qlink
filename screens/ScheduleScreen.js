@@ -10,24 +10,41 @@ import { TouchableOpacity } from "react-native";
 
 export default class ScheduleScreen extends Component {
   state = {
-    m: moment(),
+    currentWeek: moment(),
+    selectedDay: moment(),
   };
   render() {
     console.log("rendering schedule");
-    const [m] = this.state;
+    const { currentWeek } = this.state;
+    console.log(this.state);
 
-    var singleDayView = (x, y) => {
+    var singleDayView = (date) => {
       return (
-        <View>
-          <Text style={styles.day}>{x}</Text>
-          <Text style={styles.day}>{y}</Text>
-        </View>
+        <TouchableOpacity
+          onPress={() => {
+            this.setState({ ...this.state, selectedDay: date });
+          }}
+        >
+          <View
+            style={{
+              backgroundColor:
+                date.format("YYYY-MM-DD") ==
+                this.state.selectedDay.format("YYYY-MM-DD")
+                  ? "white"
+                  : "clear",
+              borderRadius: 20,
+              padding: 5,
+            }}
+          >
+            <Text style={styles.day}>{date.format("dddd")[0]}</Text>
+            <Text style={styles.day}>{date.date()}</Text>
+          </View>
+        </TouchableOpacity>
       );
     };
 
     var daysSelectorContianer = () => {
-      var mn = m.clone();
-      var from_date = mn.startOf("week");
+      var from_date = currentWeek.clone().startOf("week");
       return (
         <View
           style={{
@@ -36,13 +53,13 @@ export default class ScheduleScreen extends Component {
             padding: 15,
           }}
         >
-          {singleDayView("S", from_date.format("D"))}
-          {singleDayView("M", from_date.add(1, "days").format("D"))}
-          {singleDayView("T", from_date.add(1, "days").format("D"))}
-          {singleDayView("W", from_date.add(1, "days").format("D"))}
-          {singleDayView("T", from_date.add(1, "days").format("D"))}
-          {singleDayView("F", from_date.add(1, "days").format("D"))}
-          {singleDayView("S", from_date.add(1, "days").format("D"))}
+          {singleDayView(from_date.clone())}
+          {singleDayView(from_date.add(1, "days").clone())}
+          {singleDayView(from_date.add(1, "days").clone())}
+          {singleDayView(from_date.add(1, "days").clone())}
+          {singleDayView(from_date.add(1, "days").clone())}
+          {singleDayView(from_date.add(1, "days").clone())}
+          {singleDayView(from_date.add(1, "days").clone())}
         </View>
       );
     };
@@ -60,14 +77,44 @@ export default class ScheduleScreen extends Component {
         >
           <TouchableOpacity
             onPress={() => {
-              console.log("heree");
-              m.add(-1, "weeks");
+              console.log("today");
+              this.setState({ ...this.state, currentWeek: moment() });
+            }}
+            style={{ position: "absolute", left: 0, top: 3 }}
+          >
+            <MaterialCommunityIcons
+              name="calendar-today"
+              color="white"
+              size={25}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              console.log("back");
+              this.setState({
+                ...this.state,
+                currentWeek: currentWeek.add(-1, "weeks"),
+              });
             }}
           >
             <MaterialCommunityIcons name="arrow-left" color="white" size={30} />
           </TouchableOpacity>
-          <Text style={styles.month}>{m.format("MMMM, YYYY")}</Text>
-          <MaterialCommunityIcons name="arrow-right" color="white" size={30} />
+          <Text style={styles.month}>{currentWeek.format("MMMM, YYYY")}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              console.log("forward");
+              this.setState({
+                ...this.state,
+                currentWeek: currentWeek.add(1, "weeks"),
+              });
+            }}
+          >
+            <MaterialCommunityIcons
+              name="arrow-right"
+              color="white"
+              size={30}
+            />
+          </TouchableOpacity>
         </View>
         {daysSelectorContianer()}
         <View style={styles.box}>
