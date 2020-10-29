@@ -8,15 +8,16 @@ import Colors from "../constants/Colors";
 import moment from "moment";
 import { TouchableOpacity } from "react-native";
 
+import ClassesOnDay from "../components/ClassesOnDay";
+
 export default class ScheduleScreen extends Component {
   state = {
     currentWeek: moment(),
     selectedDay: moment(),
   };
+
   render() {
-    console.log("rendering schedule");
-    const { currentWeek } = this.state;
-    console.log(this.state);
+    const { currentWeek, selectedDay } = this.state;
 
     var singleDayView = (date) => {
       return (
@@ -80,7 +81,6 @@ export default class ScheduleScreen extends Component {
         >
           <TouchableOpacity
             onPress={() => {
-              console.log("today");
               this.setState({ ...this.state, currentWeek: moment() });
             }}
             style={{ position: "absolute", left: 0, top: 3 }}
@@ -93,7 +93,6 @@ export default class ScheduleScreen extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              console.log("back");
               this.setState({
                 ...this.state,
                 currentWeek: currentWeek.add(-1, "weeks"),
@@ -105,7 +104,6 @@ export default class ScheduleScreen extends Component {
           <Text style={styles.month}>{currentWeek.format("MMMM, YYYY")}</Text>
           <TouchableOpacity
             onPress={() => {
-              console.log("forward");
               this.setState({
                 ...this.state,
                 currentWeek: currentWeek.add(1, "weeks"),
@@ -122,12 +120,12 @@ export default class ScheduleScreen extends Component {
         {daysSelectorContianer()}
         <View style={styles.box}>
           <Text style={styles.title}>Schedule</Text>
+          <ClassesOnDay date={selectedDay} styles={styles.Classes} />
         </View>
       </LinearGradient>
     );
   }
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -139,7 +137,7 @@ const styles = StyleSheet.create({
     height: "70%",
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
-    padding: 40,
+    padding: 30,
   },
   title: {
     fontFamily: "poppins-medium",
@@ -147,6 +145,7 @@ const styles = StyleSheet.create({
     color: Colors.header,
     borderBottomColor: "#7CEAE2", // Add this to specify bottom border color
     borderBottomWidth: 5,
+    marginBottom: 20,
   },
   month: {
     fontFamily: "poppins-medium",
@@ -160,5 +159,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: Colors.header,
     paddingBottom: 10,
+  },
+  Classes: {
+    flex: 1,
   },
 });
