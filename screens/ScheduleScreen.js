@@ -7,17 +7,46 @@ import { LinearGradient } from "expo-linear-gradient";
 import Colors from "../constants/Colors";
 import moment from "moment";
 import { TouchableOpacity } from "react-native";
-
+import SchoolClass from "../data/model/SchoolClass";
 import ClassesOnDay from "../components/ClassesOnDay";
 
 export default class ScheduleScreen extends Component {
   state = {
     currentWeek: moment(),
     selectedDay: moment(),
+    classes: []
   };
 
+  constructor(props){
+    super(props);
+    this.state.classes = this.updateClasses(this.selectedDay);
+  }
+
+  updateClasses(day) {
+    var classes = [];
+
+    // TODO: Replace hardcoded initialization with server fetch
+    var c = new SchoolClass(
+      "CISC220",
+      "12:30pm - 1:30pm",
+      "Kin and Health 100"
+    );
+    classes.push({ id: "1", schoolClass: c });
+
+    c = new SchoolClass("CISC203", "2:30pm - 3:30pm", "Chernoff AUD");
+    classes.push({ id: "2", schoolClass: c });
+
+    c = new SchoolClass("CISC203", "2:30pm - 3:30pm", "Chernoff AUD");
+    classes.push({ id: "3", schoolClass: c });
+
+    c = new SchoolClass("CISC203", "2:30pm - 3:30pm", "Chernoff AUD");
+    classes.push({ id: "4", schoolClass: c });
+
+    return classes;
+  }
+
   render() {
-    const { currentWeek, selectedDay } = this.state;
+    const { currentWeek, selectedDay, classes } = this.state;
 
     var singleDayView = (date) => {
       return (
@@ -81,7 +110,7 @@ export default class ScheduleScreen extends Component {
         >
           <TouchableOpacity
             onPress={() => {
-              this.setState({ ...this.state, currentWeek: moment() });
+              this.setState({ ...this.state, selectedDay: moment(), currentWeek: moment() });
             }}
             style={{ position: "absolute", left: 0, top: 3 }}
           >
@@ -120,7 +149,7 @@ export default class ScheduleScreen extends Component {
         {daysSelectorContianer()}
         <View style={styles.box}>
           <Text style={styles.title}>Schedule</Text>
-          <ClassesOnDay date={selectedDay} styles={styles.Classes} />
+          <ClassesOnDay classes={classes} styles={styles.Classes}/>
         </View>
       </LinearGradient>
     );
