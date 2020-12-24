@@ -22,7 +22,7 @@ class Login extends React.Component {
     email: "",
     password: "",
     loading: false,
-    message: "Test",
+    message: "",
   };
 
   render() {
@@ -46,7 +46,9 @@ class Login extends React.Component {
 
         const json = await response.json();
         if (json.Result == "Success") {
-          dispatch(updateLogin(this.state.email, this.state.password));
+          dispatch(
+            updateLogin(this.state.email, this.state.password, json.URL)
+          );
         } else {
           this.setState({
             ...this.state,
