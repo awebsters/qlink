@@ -1,48 +1,64 @@
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import * as WebBrowser from "expo-web-browser";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState, Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { RectButton, ScrollView } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
 import Colors from "../constants/Colors";
 import moment from "moment";
 import { TouchableOpacity } from "react-native";
 import SchoolClass from "../data/model/SchoolClass";
 import ClassesOnDay from "../components/ClassesOnDay";
+import { connect } from "react-redux";
 
-export default class ScheduleScreen extends Component {
+const mapStateToProps = (state) => {
+  return { url: state.user.schedule_url };
+};
+
+class ScheduleScreen extends Component {
   state = {
     currentWeek: moment(),
     selectedDay: moment(),
-    classes: []
+    classes: [],
   };
 
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state.classes = this.updateClasses(this.selectedDay);
   }
 
-  updateClasses(day) {
-    var classes = [];
+  async selectDay(moment) {
+    try {
+      let formdata = new FormData();
 
-    // TODO: Replace hardcoded initialization with server fetch
-    var c = new SchoolClass(
-      "CISC220",
-      "12:30pm - 1:30pm",
-      "Kin and Health 100"
-    );
-    classes.push({ id: "1", schoolClass: c });
+      formdata.append("icsUrl", this.props.url);
+      formdata.append("Year", moment.year());
+      formdata.append("Month", moment.month() + 1);
+      formdata.append("Day", moment.day());
 
-    c = new SchoolClass("CISC203", "2:30pm - 3:30pm", "Chernoff AUD");
-    classes.push({ id: "2", schoolClass: c });
+      const response = await fetch(
+        "http://miranda.caslab.queensu.ca/GetTodaysCourses",
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          body: formdata,
+        }
+      );
 
-    c = new SchoolClass("CISC203", "2:30pm - 3:30pm", "Chernoff AUD");
-    classes.push({ id: "3", schoolClass: c });
+      const json = await response.json();
 
-    c = new SchoolClass("CISC203", "2:30pm - 3:30pm", "Chernoff AUD");
-    classes.push({ id: "4", schoolClass: c });
+      var i = 1;
 
-    return classes;
+      var classes = [];
+      var c;
+      for (var name of Object.keys(json)) {
+        c = new SchoolClass(name, json[name].Starts, json[name].Location);
+        classes.push({ id: i.toString(), schoolClass: c });
+        i++;
+      }
+      this.setState({ ...this.state, classes: classes, selectedDay: moment });
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   render() {
@@ -52,10 +68,7 @@ export default class ScheduleScreen extends Component {
       return (
         <TouchableOpacity
           onPress={() => {
-            this.setState({
-              ...this.state,
-              selectedDay: date,
-            });
+            this.selectDay(date);
           }}
         >
           <View
@@ -110,7 +123,11 @@ export default class ScheduleScreen extends Component {
         >
           <TouchableOpacity
             onPress={() => {
-              this.setState({ ...this.state, selectedDay: moment(), currentWeek: moment() });
+              this.setState({
+                ...this.state,
+                selectedDay: moment(),
+                currentWeek: moment(),
+              });
             }}
             style={{ position: "absolute", left: 0, top: 3 }}
           >
@@ -149,12 +166,21 @@ export default class ScheduleScreen extends Component {
         {daysSelectorContianer()}
         <View style={styles.box}>
           <Text style={styles.title}>Schedule</Text>
-          <ClassesOnDay classes={classes} styles={styles.Classes}/>
+          <ClassesOnDay classes={classes} styles={styles.Classes} />
         </View>
       </LinearGradient>
     );
   }
+
+  componentDidMount() {
+    if (this.state.classes.length == 0) {
+      this.selectDay(this.state.selectedDay);
+    }
+  }
 }
+
+export default connect(mapStateToProps)(ScheduleScreen);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
