@@ -5,6 +5,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { connect } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
@@ -20,15 +21,51 @@ class Login extends React.Component {
   state = {
     email: "",
     password: "",
-  };
-
-  login = () => {
-    const { dispatch } = this.props;
-
-    dispatch(updateLogin(this.state.email, this.state.password));
+    loading: false,
+    message: "",
   };
 
   render() {
+    var login = async () => {
+      this.setState({ ...this.state, loading: true });
+      const { dispatch } = this.props;
+
+      try {
+        let formdata = new FormData();
+
+        formdata.append("username", this.state.email);
+        formdata.append("password", this.state.password);
+
+        const response = await fetch("http://miranda.caslab.queensu.ca/Login", {
+          method: "post",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          body: formdata,
+        });
+
+        const json = await response.json();
+        if (json.Result == "Success") {
+          dispatch(
+            updateLogin(this.state.email, this.state.password, json.URL)
+          );
+        } else {
+          this.setState({
+            ...this.state,
+            loading: false,
+            message: "Error: invalid username and password combination",
+          });
+        }
+      } catch (e) {
+        this.setState({
+          ...this.state,
+          loading: false,
+          message:
+            "Error: Please check your internet connection or try again later",
+        });
+      }
+    };
+
     return (
       <LinearGradient
         colors={[Colors.loginPrimary, Colors.loginSecondary]}
@@ -36,6 +73,7 @@ class Login extends React.Component {
       >
         <Text style={styles.title}>Sign In</Text>
         <View style={styles.box}>
+          <Text>{this.state.message}</Text>
           <View style={styles.inputView}>
             <TextInput
               style={styles.inputText}
@@ -53,7 +91,8 @@ class Login extends React.Component {
               onChangeText={(text) => this.setState({ password: text })}
             />
           </View>
-          <TouchableOpacity style={styles.loginBtn} onPress={this.login}>
+          <ActivityIndicator animating={this.state.loading} />
+          <TouchableOpacity style={styles.loginBtn} onPress={login}>
             <Text style={styles.loginText}>LOGIN</Text>
           </TouchableOpacity>
         </View>
