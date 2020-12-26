@@ -31,7 +31,7 @@ class ScheduleScreen extends Component {
       formdata.append("icsUrl", this.props.url);
       formdata.append("Year", moment.year());
       formdata.append("Month", moment.month() + 1);
-      formdata.append("Day", moment.day());
+      formdata.append("Day", moment.date());
 
       const response = await fetch(
         "http://miranda.caslab.queensu.ca/GetTodaysCourses",
@@ -55,7 +55,13 @@ class ScheduleScreen extends Component {
         classes.push({ id: i.toString(), schoolClass: c });
         i++;
       }
-      this.setState({ ...this.state, classes: classes, selectedDay: moment });
+
+      this.setState({
+        ...this.state,
+        classes: classes,
+        selectedDay: moment,
+        currentWeek: moment,
+      });
     } catch (e) {
       console.log(e);
     }
@@ -123,11 +129,7 @@ class ScheduleScreen extends Component {
         >
           <TouchableOpacity
             onPress={() => {
-              this.setState({
-                ...this.state,
-                selectedDay: moment(),
-                currentWeek: moment(),
-              });
+              this.selectDay(moment());
             }}
             style={{ position: "absolute", left: 0, top: 3 }}
           >
