@@ -6,10 +6,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import FoodMenu from "../components/FoodMenu";
-
+import MealPlan from "../components/MealPlan";
 export default function FoodScreen() {
-  var tamVar = 1;
-  var flexVar = 1;
+
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flex: 1 }}>
@@ -28,16 +28,7 @@ export default function FoodScreen() {
             >
               <View style={styles.underline} />
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                paddingLeft: 10,
-              }}
-            >
-              <Text style={styles.headerText}>TAMs: {tamVar}</Text>
-              <Text style={styles.headerText}>Flex$: {flexVar}</Text>
-            </View>
+            <MealPlan></MealPlan>
             <View style={styles.square}>
               <Text style={styles.header}>Menu</Text>
               <View
@@ -56,7 +47,7 @@ export default function FoodScreen() {
                   fontFamily: "poppins-light",
                 }}
               >
-                <Button color={Colors.header} title="Leonard" />
+                <Button color={Colors.header} title="Leonard"/>
                 <Button color={Colors.header} title="Ban Righ" />
                 <Button color={Colors.header} title="Jean Royce" /> 
               </View>

@@ -52,12 +52,12 @@ export default class FoodMenu extends Component {
        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}><Text style={styles.title}>{nam}</Text></View>
        <View style={styles.boxText}>
        <FlatList
+        ListHeaderComponent={<View style={{margin:6}}></View>}
         data={item[nam]}
         renderItem={({ item }) =>  
         <View>
           <View style={{flexDirection: "row", justifyContent: "flex-start",
                 paddingLeft: 10}}>
-
             <Text style={styles.menuTitle}>{Object.keys(item)[0]}</Text>
             <FlatList
                   data={item[Object.keys(item)[0]]}
@@ -120,8 +120,9 @@ const styles = StyleSheet.create({
   },
   menuTitle: {
     textAlign: "left",
+    left:"10%",
     fontSize: 17,
-    fontFamily: "poppins-regular",
+    fontFamily: "poppins-medium",
     color: Colors.header,
     flex: 0.5
   },
@@ -134,8 +135,8 @@ const styles = StyleSheet.create({
   },
   lineStyle:{
         borderWidth: 0.5,
-        borderColor:'black',
+        borderColor: Colors.header,
         margin:10,
-        opacity:80
+        opacity:.2
    }
 });
