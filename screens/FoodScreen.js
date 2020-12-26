@@ -7,12 +7,12 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import FoodMenu from "../components/FoodMenu";
 import MealPlan from "../components/MealPlan";
+
 export default function FoodScreen() {
 
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={{ flex: 1 }}>
         <LinearGradient
           colors={[Colors.primary, Colors.secondary]}
           style={{ flex: 1 }}
@@ -58,7 +58,6 @@ export default function FoodScreen() {
 
           
         </LinearGradient>
-      </ScrollView>
     </View>
   );
 }
