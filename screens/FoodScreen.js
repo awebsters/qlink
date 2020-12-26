@@ -1,82 +1,103 @@
-import { Ionicons } from "@expo/vector-icons";
-import * as WebBrowser from "expo-web-browser";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { RectButton, ScrollView } from "react-native-gesture-handler";
+import Colors from "../constants/Colors";
+import { LinearGradient } from "expo-linear-gradient";
+import { Button, StyleSheet, Text, View } from "react-native";
+import FoodMenu from "../components/FoodMenu";
+import MealPlan from "../components/MealPlan";
 
 export default function FoodScreen() {
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.contentContainer}
-    >
-      <OptionButton
-        icon="md-school"
-        label="Read the Expo documentation"
-        onPress={() => WebBrowser.openBrowserAsync("https://docs.expo.io")}
-      />
-
-      <OptionButton
-        icon="md-compass"
-        label="Read the React Navigation documentation"
-        onPress={() =>
-          WebBrowser.openBrowserAsync("https://reactnavigation.org")
-        }
-      />
-
-      <OptionButton
-        icon="ios-chatboxes"
-        label="Ask a question on the forums"
-        onPress={() => WebBrowser.openBrowserAsync("https://forums.expo.io")}
-        isLastOption
-      />
-    </ScrollView>
-  );
-}
-
-function OptionButton({ icon, label, onPress, isLastOption }) {
-  return (
-    <RectButton
-      style={[styles.option, isLastOption && styles.lastOption]}
-      onPress={onPress}
-    >
-      <View style={{ flexDirection: "row" }}>
-        <View style={styles.optionIconContainer}>
-          <Ionicons name={icon} size={22} color="rgba(0,0,0,0.35)" />
+    <View style={styles.container}>
+      <LinearGradient
+        colors={[Colors.primary, Colors.secondary]}
+        style={{ flex: 1 }}
+      >
+        <View style={styles.content}>
+          <Text style={styles.header}>Your Balance</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              paddingLeft: 20,
+            }}
+          >
+            <View style={styles.underline} />
+          </View>
+          <MealPlan></MealPlan>
+          <View style={styles.square}>
+            <Text style={styles.header}>Menu</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                paddingLeft: 20,
+              }}
+            >
+              <View style={styles.menuUnderline} />
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                fontFamily: "poppins-light",
+              }}
+            >
+              <Button color={Colors.header} title="Leonard" />
+              <Button color={Colors.header} title="Ban Righ" />
+              <Button color={Colors.header} title="Jean Royce" />
+            </View>
+            <FoodMenu />
+          </View>
         </View>
-        <View style={styles.optionTextContainer}>
-          <Text style={styles.optionText}>{label}</Text>
-        </View>
-      </View>
-    </RectButton>
+      </LinearGradient>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fafafa",
+    backgroundColor: "#fff",
   },
-  contentContainer: {
-    paddingTop: 15,
+  content: {
+    flex: 1,
   },
-  optionIconContainer: {
-    marginRight: 12,
+  underline: {
+    backgroundColor: "#E1B2FF",
+    height: 4,
+    flex: 0.48,
   },
-  option: {
-    backgroundColor: "#fdfdfd",
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderBottomWidth: 0,
-    borderColor: "#ededed",
+  menuUnderline: {
+    backgroundColor: "#E1B2FF",
+    height: 4,
+    flex: 0.2,
   },
-  lastOption: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
+  header: {
+    fontFamily: "poppins-medium",
+    fontSize: 24,
+    color: Colors.header,
+    paddingTop: 30,
+    paddingLeft: 21,
   },
-  optionText: {
-    fontSize: 15,
-    alignSelf: "flex-start",
-    marginTop: 1,
+  headerText: {
+    fontFamily: "poppins-medium",
+    fontSize: 18,
+    color: Colors.header,
+    paddingTop: 10,
+    paddingLeft: 10,
+    paddingRight: 40,
+    paddingBottom: 15,
+  },
+  square: {
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    flex: 1,
+    backgroundColor: "white",
+    alignSelf: "stretch",
+  },
+  options: {},
+
+  content_section: {
+    paddingTop: 20,
   },
 });
