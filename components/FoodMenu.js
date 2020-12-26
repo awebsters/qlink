@@ -23,6 +23,7 @@ export default class FoodMenu extends Component {
           BreakFast: [
             {Pastry: ["Croissant", "Muffins"]},
             {Classics: ["Eggs", "Ham", "Potatoes"]},
+            {Entree: ["Soup", "Crackers", "Bread"]},
             {Entree: ["Soup", "Crackers", "Bread"]}
         ]
       },
@@ -48,7 +49,7 @@ export default class FoodMenu extends Component {
     return (
       <View style={styles.container}>
         
-       <View style={{ alignItems: 'left', justifyContent: 'center' }}><Text style={styles.title}>{nam}</Text></View>
+       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}><Text style={styles.title}>{nam}</Text></View>
        <View style={styles.boxText}>
        <FlatList
         data={item[nam]}
@@ -75,7 +76,7 @@ export default class FoodMenu extends Component {
   render() {
     const { data } = this.state;
     return (
-      <View >
+      <View style={{flex:1}}>
     <FlatList
       ItemSeparatorComponent={() => <View style={{ margin: 10 }} />}
       contentContainerStyle={{ padding: 40 }}
@@ -91,9 +92,7 @@ export default class FoodMenu extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: "row",
-    justifyContent: "flex-start",
     borderRadius: 20,
     backgroundColor: "#7CEAE2",
     shadowColor: "#000",
@@ -106,17 +105,18 @@ const styles = StyleSheet.create({
     elevation: 2
   },
   title: {
+    width: 90,
+    bottom: "34%",
     fontSize: 18,
     fontFamily: "poppins-regular",
     color: "white",
-    transform: [{ rotate: "-90deg" }]  
-
-
+    transform: [{ rotate: "-90deg" }],
+    
   },
   boxText: {
     borderRadius: 20,
     backgroundColor: "#fff",
-    flex: 1
+    flex: 8
   },
   menuTitle: {
     textAlign: "left",
