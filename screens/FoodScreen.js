@@ -1,24 +1,31 @@
-import { Ionicons } from "@expo/vector-icons";
-import * as WebBrowser from "expo-web-browser";
 import React from "react";
 import Colors from "../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { Button, StyleSheet, Text, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
 import FoodMenu from "../components/FoodMenu";
 import MealPlan from "../components/MealPlan";
 
 export default function FoodScreen() {
-
-
   return (
     <View style={styles.container}>
-        <LinearGradient
-          colors={[Colors.primary, Colors.secondary]}
-          style={{ flex: 1 }}
-        >
-          <View style={styles.content}>
-            <Text style={styles.header}>Your Balance</Text>
+      <LinearGradient
+        colors={[Colors.primary, Colors.secondary]}
+        style={{ flex: 1 }}
+      >
+        <View style={styles.content}>
+          <Text style={styles.header}>Your Balance</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              paddingLeft: 20,
+            }}
+          >
+            <View style={styles.underline} />
+          </View>
+          <MealPlan></MealPlan>
+          <View style={styles.square}>
+            <Text style={styles.header}>Menu</Text>
             <View
               style={{
                 flexDirection: "row",
@@ -26,38 +33,23 @@ export default function FoodScreen() {
                 paddingLeft: 20,
               }}
             >
-              <View style={styles.underline} />
+              <View style={styles.menuUnderline} />
             </View>
-            <MealPlan></MealPlan>
-            <View style={styles.square}>
-              <Text style={styles.header}>Menu</Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "flex-start",
-                  paddingLeft: 20,
-                }}
-              >
-                <View style={styles.menuUnderline} />
-              </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  fontFamily: "poppins-light",
-                }}
-              >
-                <Button color={Colors.header} title="Leonard"/>
-                <Button color={Colors.header} title="Ban Righ" />
-                <Button color={Colors.header} title="Jean Royce" /> 
-              </View>
-              <FoodMenu/>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                fontFamily: "poppins-light",
+              }}
+            >
+              <Button color={Colors.header} title="Leonard" />
+              <Button color={Colors.header} title="Ban Righ" />
+              <Button color={Colors.header} title="Jean Royce" />
             </View>
-          
+            <FoodMenu />
           </View>
-
-          
-        </LinearGradient>
+        </View>
+      </LinearGradient>
     </View>
   );
 }
@@ -109,4 +101,3 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
 });
-
