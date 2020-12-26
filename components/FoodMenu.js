@@ -3,19 +3,10 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   FlatList,
-  ImageBackground,
-  Platform,
-  Modal,
 } from "react-native";
 
-
 import Colors from "../constants/Colors";
-import {
-  TouchableOpacity,
-  TouchableHighlight,
-} from "react-native-gesture-handler";
 export default class FoodMenu extends Component {
   state = {
       data: [
