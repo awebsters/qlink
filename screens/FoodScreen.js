@@ -5,7 +5,23 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import FoodMenu from "../components/FoodMenu";
 import MealPlan from "../components/MealPlan";
 
-export default function FoodScreen() {
+export default class FoodScreen extends React.Component{
+
+  constructor(props) {
+    super(props);     
+    this.state = {
+      option: "Leonard"
+    }; 
+}  
+
+  onButtonPress = (name) => {
+    this.setState({
+      option:name
+    });
+  }
+
+  render(){
+
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -42,16 +58,20 @@ export default function FoodScreen() {
                 fontFamily: "poppins-light",
               }}
             >
-              <Button color={Colors.header} title="Leonard" />
+              {/* <Button color={Colors.header} title="Leonard" />
               <Button color={Colors.header} title="Ban Righ" />
-              <Button color={Colors.header} title="Jean Royce" />
+              <Button color={Colors.header} title="Jean Royce" /> */}
+              <Button color={Colors.header} onPress={() => this.onButtonPress("Leonard")} title="Leonard" />
+              <Button color={Colors.header} onPress={() => this.onButtonPress("Ban_Righ")} title="Ban Righ" />
+              <Button color={Colors.header} onPress={() => this.onButtonPress("Jean_Royce")} title="Jean Royce" />
             </View>
-            <FoodMenu />
+            <FoodMenu option={this.state.option}/>
           </View>
         </View>
       </LinearGradient>
     </View>
   );
+}
 }
 
 const styles = StyleSheet.create({
