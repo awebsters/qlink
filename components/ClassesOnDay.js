@@ -38,9 +38,12 @@ export default class ClassesOnDay extends Component {
   }
 
   render() {
-    const { classes, styles, isLoading } = this.props;
+    const { classes, styles, isLoading, message } = this.props;
+
     if (isLoading) {
       return <ActivityIndicator />;
+    } else if (message) {
+      return <Text>{message}</Text>;
     }
     return (
       <FlatList

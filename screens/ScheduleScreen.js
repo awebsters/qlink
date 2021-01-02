@@ -10,6 +10,7 @@ import ClassesOnDay from "../components/ClassesOnDay";
 import SingleDaySelector from "../components/SingleDaySelector";
 import { updateClasses, updateDay } from "../data/redux/schedule";
 import SchoolClass from "../data/model/SchoolClass";
+import { isLoaded } from "expo-font";
 
 const mapStateToProps = (state) => {
   return {
@@ -23,10 +24,11 @@ class ScheduleScreen extends Component {
   state = {
     currentWeek: moment(),
     isLoading: false,
+    message: "",
   };
 
   render() {
-    const { currentWeek, isLoading } = this.state;
+    const { currentWeek, isLoading, message } = this.state;
     const { classes, dispatch } = this.props;
 
     return (
@@ -84,6 +86,7 @@ class ScheduleScreen extends Component {
             isLoading={isLoading}
             classes={classes}
             styles={styles.Classes}
+            message={message}
           />
         </View>
       </LinearGradient>
@@ -129,6 +132,10 @@ class ScheduleScreen extends Component {
     );
   };
 
+  componentDidMount() {
+    this.selectDay(moment());
+  }
+
   selectDay = async (moment) => {
     this.setState({ isLoading: true });
     try {
@@ -166,10 +173,20 @@ class ScheduleScreen extends Component {
         classes.push({ id: i.toString(), schoolClass: c });
         i++;
       }
-      this.setState({ isLoading: false });
+      if (classes.length == 0) {
+        this.setState({
+          isLoading: false,
+          message: "You have no classes today!",
+        });
+      } else {
+        this.setState({ isLoading: false });
+      }
       this.props.dispatch(updateClasses(classes));
     } catch (e) {
-      this.setState({ isLoading: false });
+      this.setState({
+        isLoading: false,
+        message: "Please check your internet connection or try again later.",
+      });
       console.log(e);
     }
   };
