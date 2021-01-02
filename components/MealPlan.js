@@ -14,8 +14,8 @@ import user from "../data/redux/user";
 export class MealPlan extends Component {
 
     state = {
-        tams:1,
-        flex:1,
+        tams:"",
+        flex:"",
     };
 
     constructor(props){
@@ -25,9 +25,6 @@ export class MealPlan extends Component {
     componentDidMount() {
       try {
         let formdata = new FormData();
-
-        console.log(this.props.username);
-        console.log(this.props.password);
 
         formdata.append("username", this.props.username);
         formdata.append("password", this.props.password);
