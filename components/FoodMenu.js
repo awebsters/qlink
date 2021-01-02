@@ -2,33 +2,7 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, FlatList, ActivityIndicator} from "react-native";
 import Colors from "../constants/Colors";
 export default class FoodMenu extends Component {
-  // state = {
-  //   data: {
-  //     Leonard: [
-  //     {
-  //       BreakFast: [
-  //         { Pastry: ["Croissant", "Muffins"] },
-  //         { Classics: ["Eggs", "Ham", "Potatoes"] },
-  //         { Entree: ["Soup", "Crackers", "Bread"] },
-  //         { Entree: ["Soup", "Crackers", "Bread"] },
-  //       ],
-  //     },
-  //     {
-  //       Lunch: [
-  //         { Pastry: ["Croissant", "Muffins"] },
-  //         { Classics: ["Eggs", "Ham", "Potatoes"] },
-  //         { Entree: ["Soup", "Crackers", "Bread"] },
-  //       ],
-  //     },
-  //     {
-  //       Dinner: [
-  //         { Pastry: ["Croissant", "Muffins"] },
-  //         { Classics: ["Eggs", "Ham", "Potatoes"] },
-  //         { Entree: ["Soup", "Crackers", "Bread"] },
-  //       ],
-  //     },
-  //   ]}
-  // };
+
   state = {data: [], isLoading: true}
 
   componentDidMount() {
