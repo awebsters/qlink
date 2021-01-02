@@ -55,7 +55,7 @@ export default class FoodMenu extends Component {
         <View style={styles.boxText}>
           <FlatList
             ListHeaderComponent={<View style={{ margin: 6 }}></View>}
-            ListFooterComponent={<View style={{ margin: 6 }}></View>}
+            ListFooterComponent={<View style={{ margin: 12 }}></View>}
             ItemSeparatorComponent={() => <View style={styles.lineStyle}></View>}
             data={item[nam]}
             renderItem={({ item }) => (
@@ -63,11 +63,12 @@ export default class FoodMenu extends Component {
                 <View
                   style={{
                     flexDirection: "row",
-                    justifyContent: "flex-start",
                     paddingLeft: 10,
+                    alignItems: "left",
+                    justifyContent: "space-between"
                   }}
                 >
-                  <Text style={styles.menuTitle} >{Object.keys(item)[0]}</Text>
+                  <Text style={styles.menuTitle} adjustsFontSizeToFit={true}>{Object.keys(item)[0]}</Text>
                   <FlatList
                     data={item[Object.keys(item)[0]]}
                     renderItem={({ item }) => (
@@ -120,8 +121,10 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   title: {
+    textAlignVertical: "top",
+    textAlign: "auto",
     width: 90,
-    bottom: "34%",
+    marginTop:40,
     fontSize: 18,
     fontFamily: "poppins-regular",
     color: "white",
@@ -134,12 +137,12 @@ const styles = StyleSheet.create({
   },
   menuTitle: {
     textAlign: "left",
-    left: "10%",
-    fontSize: 17,
+    left: "5%",
     fontFamily: "poppins-medium",
     color: Colors.header,
-    flexWrap: 'wrap',
-    flexShrink:0.7
+    width:80,
+    height:60,
+    position: "absolute"
     
   },
   menu: {
@@ -147,15 +150,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "poppins-regular",
     color: Colors.header,
-    flexWrap: 'wrap',
-    flex:1,
+    marginLeft: 90,
+
 
     
   },
   lineStyle: {
     borderWidth: 0.5,
     borderColor: Colors.header,
-    margin: 10,
+    marginTop:25,
+    margin: 14,
     opacity: 0.2,
   },
   loading: {
