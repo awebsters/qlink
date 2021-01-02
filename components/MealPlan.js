@@ -40,8 +40,8 @@ export class MealPlan extends Component {
       )
           .then((response) => response.json())
           .then((json) => {
-            this.setState({ tams: json.TAMS });
-            this.setState({ flex: json.FLEX });
+            this.setState({ tams: json.TAMS, flex: json.FLEX});
+            
           })
           .catch((error) => console.error(error))
       }
