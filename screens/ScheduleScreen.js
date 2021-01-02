@@ -8,7 +8,8 @@ import { connect } from "react-redux";
 import Colors from "../constants/Colors";
 import ClassesOnDay from "../components/ClassesOnDay";
 import SingleDaySelector from "../components/SingleDaySelector";
-import { updateDay } from "../data/redux/schedule";
+import { updateClasses, updateDay } from "../data/redux/schedule";
+import SchoolClass from "../data/model/SchoolClass";
 
 const mapStateToProps = (state) => {
   return {
@@ -42,6 +43,7 @@ class ScheduleScreen extends Component {
             onPress={() => {
               this.setState({ currentWeek: moment() });
               dispatch(updateDay(moment()));
+              this.selectDay(moment());
             }}
             style={{ position: "absolute", left: 0, top: 3 }}
           >
@@ -93,33 +95,70 @@ class ScheduleScreen extends Component {
           padding: 15,
         }}
       >
-        <SingleDaySelector day={week_start.clone()} url={this.props.url} />
+        <SingleDaySelector day={week_start.clone()} onSelect={this.selectDay} />
         <SingleDaySelector
           day={week_start.add(1, "days").clone()}
-          url={this.props.url}
+          onSelect={this.selectDay}
         />
         <SingleDaySelector
           day={week_start.add(1, "days").clone()}
-          url={this.props.url}
+          onSelect={this.selectDay}
         />
         <SingleDaySelector
           day={week_start.add(1, "days").clone()}
-          url={this.props.url}
+          onSelect={this.selectDay}
         />
         <SingleDaySelector
           day={week_start.add(1, "days").clone()}
-          url={this.props.url}
+          onSelect={this.selectDay}
         />
         <SingleDaySelector
           day={week_start.add(1, "days").clone()}
-          url={this.props.url}
+          onSelect={this.selectDay}
         />
         <SingleDaySelector
           day={week_start.add(1, "days").clone()}
-          url={this.props.url}
+          onSelect={this.selectDay}
         />
       </View>
     );
+  };
+
+  selectDay = async (moment) => {
+    try {
+      let formdata = new FormData();
+
+      formdata.append("icsUrl", this.props.url);
+      formdata.append("Year", moment.year());
+      formdata.append("Month", moment.month() + 1);
+      formdata.append("Day", moment.date());
+
+      const response = await fetch(
+        "http://miranda.caslab.queensu.ca/GetTodaysCourses",
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          body: formdata,
+        }
+      );
+
+      const json = await response.json();
+
+      var i = 1;
+
+      var classes = [];
+      var c;
+      for (var name of Object.keys(json)) {
+        c = new SchoolClass(name, json[name].Starts, json[name].Location);
+        classes.push({ id: i.toString(), schoolClass: c });
+        i++;
+      }
+      this.props.dispatch(updateClasses(classes));
+    } catch (e) {
+      console.log(e);
+    }
   };
 }
 
