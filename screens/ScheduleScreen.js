@@ -3,25 +3,29 @@ import React, { useState, Component } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import moment from "moment";
+import { connect } from "react-redux";
 
 import Colors from "../constants/Colors";
 import ClassesOnDay from "../components/ClassesOnDay";
-import { connect } from "react-redux";
 import SingleDaySelector from "../components/SingleDaySelector";
+import { updateDay } from "../data/redux/schedule";
 
 const mapStateToProps = (state) => {
-  return { url: state.user.schedule_url, classes: state.schedule.classes };
+  return {
+    url: state.user.schedule_url,
+    classes: state.schedule.classes,
+    selectedDay: moment(state.schedule.selectedDay),
+  };
 };
 
 class ScheduleScreen extends Component {
   state = {
     currentWeek: moment(),
-    selectedDay: moment(),
   };
 
   render() {
     const { currentWeek } = this.state;
-    const { classes } = this.props;
+    const { classes, dispatch } = this.props;
 
     return (
       <LinearGradient
@@ -36,7 +40,8 @@ class ScheduleScreen extends Component {
         >
           <TouchableOpacity
             onPress={() => {
-              this.selectDay(moment());
+              this.setState({ currentWeek: moment() });
+              dispatch(updateDay(moment()));
             }}
             style={{ position: "absolute", left: 0, top: 3 }}
           >
@@ -56,7 +61,6 @@ class ScheduleScreen extends Component {
           <Text style={styles.month}>{currentWeek.format("MMMM, YYYY")}</Text>
           <TouchableOpacity
             onPress={() => {
-              console.log("right");
               this.setState({
                 ...this.state,
                 currentWeek: currentWeek.add(1, "weeks"),
@@ -89,23 +93,34 @@ class ScheduleScreen extends Component {
           padding: 15,
         }}
       >
-        <SingleDaySelector day={week_start.clone()} />
-        <SingleDaySelector day={week_start.add(1, "days").clone()} />
-        <SingleDaySelector day={week_start.add(1, "days").clone()} />
-        <SingleDaySelector day={week_start.add(1, "days").clone()} />
-        <SingleDaySelector day={week_start.add(1, "days").clone()} />
-        <SingleDaySelector day={week_start.add(1, "days").clone()} />
-        <SingleDaySelector day={week_start.add(1, "days").clone()} />
+        <SingleDaySelector day={week_start.clone()} url={this.props.url} />
+        <SingleDaySelector
+          day={week_start.add(1, "days").clone()}
+          url={this.props.url}
+        />
+        <SingleDaySelector
+          day={week_start.add(1, "days").clone()}
+          url={this.props.url}
+        />
+        <SingleDaySelector
+          day={week_start.add(1, "days").clone()}
+          url={this.props.url}
+        />
+        <SingleDaySelector
+          day={week_start.add(1, "days").clone()}
+          url={this.props.url}
+        />
+        <SingleDaySelector
+          day={week_start.add(1, "days").clone()}
+          url={this.props.url}
+        />
+        <SingleDaySelector
+          day={week_start.add(1, "days").clone()}
+          url={this.props.url}
+        />
       </View>
     );
   };
-
-  componentDidMount() {
-    // When the screen is finished displaying, we fetch todays classes
-    if (this.state.classes.length == 0) {
-      this.selectDay(this.state.selectedDay);
-    }
-  }
 }
 
 export default connect(mapStateToProps)(ScheduleScreen);
@@ -137,12 +152,6 @@ const styles = StyleSheet.create({
     color: Colors.header,
     paddingRight: 10,
     paddingLeft: 10,
-  },
-  day: {
-    fontFamily: "poppins-medium",
-    fontSize: 20,
-    color: Colors.header,
-    paddingBottom: 10,
   },
   Classes: {
     flex: 1,

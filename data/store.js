@@ -6,6 +6,7 @@ import rootReducer from "./redux";
 const persistConfig = {
   key: "root2",
   storage: AsyncStorage,
+  blacklist: ["schedule"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
