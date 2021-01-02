@@ -18,7 +18,6 @@ class SingleDaySelector extends Component {
       <TouchableOpacity
         onPress={() => {
           dispatch(updateDay(day));
-          // this.selectDay(day);
           onSelect(day);
         }}
       >
