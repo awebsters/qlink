@@ -22,10 +22,11 @@ const mapStateToProps = (state) => {
 class ScheduleScreen extends Component {
   state = {
     currentWeek: moment(),
+    isLoading: false,
   };
 
   render() {
-    const { currentWeek } = this.state;
+    const { currentWeek, isLoading } = this.state;
     const { classes, dispatch } = this.props;
 
     return (
@@ -45,7 +46,7 @@ class ScheduleScreen extends Component {
               dispatch(updateDay(moment()));
               this.selectDay(moment());
             }}
-            style={{ position: "absolute", left: 0, top: 3 }}
+            style={{ position: "absolute", left: 10, top: 3 }}
           >
             <MaterialCommunityIcons
               name="calendar-today"
@@ -79,7 +80,11 @@ class ScheduleScreen extends Component {
         {this.daysSelectorContianer()}
         <View style={styles.box}>
           <Text style={styles.title}>Schedule</Text>
-          <ClassesOnDay classes={classes} styles={styles.Classes} />
+          <ClassesOnDay
+            isLoading={isLoading}
+            classes={classes}
+            styles={styles.Classes}
+          />
         </View>
       </LinearGradient>
     );
@@ -125,6 +130,7 @@ class ScheduleScreen extends Component {
   };
 
   selectDay = async (moment) => {
+    this.setState({ isLoading: true });
     try {
       let formdata = new FormData();
 
@@ -155,8 +161,10 @@ class ScheduleScreen extends Component {
         classes.push({ id: i.toString(), schoolClass: c });
         i++;
       }
+      this.setState({ isLoading: false });
       this.props.dispatch(updateClasses(classes));
     } catch (e) {
+      this.setState({ isLoading: false });
       console.log(e);
     }
   };

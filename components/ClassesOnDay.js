@@ -1,11 +1,11 @@
 import React, { Component } from "react";
+import { ActivityIndicator } from "react-native";
 import { FlatList } from "react-native";
 import { View, Text, StyleSheet, Image } from "react-native";
 
 import Colors from "../constants/Colors";
 export default class ClassesOnDay extends Component {
-  state = {
-  };
+  state = {};
 
   Item(item) {
     const { code, time, location } = item.schoolClass;
@@ -30,7 +30,10 @@ export default class ClassesOnDay extends Component {
   }
 
   render() {
-    const { styles, classes } = this.props;
+    const { classes, styles, isLoading } = this.props;
+    if (isLoading) {
+      return <ActivityIndicator />;
+    }
     return (
       <FlatList
         style={styles}
