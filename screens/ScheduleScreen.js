@@ -1,101 +1,35 @@
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import * as WebBrowser from "expo-web-browser";
-import React, { useState, Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { RectButton, ScrollView } from "react-native-gesture-handler";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import React, { Component } from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import Colors from "../constants/Colors";
 import moment from "moment";
-import { TouchableOpacity } from "react-native";
-import SchoolClass from "../data/model/SchoolClass";
-import ClassesOnDay from "../components/ClassesOnDay";
+import { connect } from "react-redux";
 
-export default class ScheduleScreen extends Component {
+import Colors from "../constants/Colors";
+import ClassesOnDay from "../components/ClassesOnDay";
+import SingleDaySelector from "../components/SingleDaySelector";
+import { updateClasses, updateDay } from "../data/redux/schedule";
+import SchoolClass from "../data/model/SchoolClass";
+import { isLoaded } from "expo-font";
+
+const mapStateToProps = (state) => {
+  return {
+    url: state.user.schedule_url,
+    classes: state.schedule.classes,
+    selectedDay: moment(state.schedule.selectedDay),
+  };
+};
+
+class ScheduleScreen extends Component {
   state = {
     currentWeek: moment(),
-    selectedDay: moment(),
-    classes: []
+    isLoading: false,
+    message: "",
   };
 
-  constructor(props){
-    super(props);
-    this.state.classes = this.updateClasses(this.selectedDay);
-  }
-
-  updateClasses(day) {
-    var classes = [];
-
-    // TODO: Replace hardcoded initialization with server fetch
-    var c = new SchoolClass(
-      "CISC220",
-      "12:30pm - 1:30pm",
-      "Kin and Health 100"
-    );
-    classes.push({ id: "1", schoolClass: c });
-
-    c = new SchoolClass("CISC203", "2:30pm - 3:30pm", "Chernoff AUD");
-    classes.push({ id: "2", schoolClass: c });
-
-    c = new SchoolClass("CISC203", "2:30pm - 3:30pm", "Chernoff AUD");
-    classes.push({ id: "3", schoolClass: c });
-
-    c = new SchoolClass("CISC203", "2:30pm - 3:30pm", "Chernoff AUD");
-    classes.push({ id: "4", schoolClass: c });
-
-    return classes;
-  }
-
   render() {
-    const { currentWeek, selectedDay, classes } = this.state;
-
-    var singleDayView = (date) => {
-      return (
-        <TouchableOpacity
-          onPress={() => {
-            this.setState({
-              ...this.state,
-              selectedDay: date,
-            });
-          }}
-        >
-          <View
-            style={{
-              backgroundColor:
-                date.format("YYYY-MM-DD") ==
-                this.state.selectedDay.format("YYYY-MM-DD")
-                  ? "white"
-                  : "transparent",
-              borderRadius: 20,
-              padding: 5,
-            }}
-          >
-            <Text style={styles.day}>{date.format("dddd")[0]}</Text>
-            <Text style={styles.day}>{date.date()}</Text>
-          </View>
-        </TouchableOpacity>
-      );
-    };
-
-    var daysSelectorContianer = () => {
-      var from_date = currentWeek.clone().startOf("week");
-      return (
-        <View
-          style={{
-            justifyContent: "space-evenly",
-            flexDirection: "row",
-            padding: 15,
-          }}
-        >
-          {singleDayView(from_date.clone())}
-          {singleDayView(from_date.add(1, "days").clone())}
-          {singleDayView(from_date.add(1, "days").clone())}
-          {singleDayView(from_date.add(1, "days").clone())}
-          {singleDayView(from_date.add(1, "days").clone())}
-          {singleDayView(from_date.add(1, "days").clone())}
-          {singleDayView(from_date.add(1, "days").clone())}
-        </View>
-      );
-    };
+    const { currentWeek, isLoading, message } = this.state;
+    const { classes, dispatch } = this.props;
 
     return (
       <LinearGradient
@@ -110,9 +44,11 @@ export default class ScheduleScreen extends Component {
         >
           <TouchableOpacity
             onPress={() => {
-              this.setState({ ...this.state, selectedDay: moment(), currentWeek: moment() });
+              this.setState({ currentWeek: moment() });
+              dispatch(updateDay(moment()));
+              this.selectDay(moment());
             }}
-            style={{ position: "absolute", left: 0, top: 3 }}
+            style={{ position: "absolute", left: 10, top: 3 }}
           >
             <MaterialCommunityIcons
               name="calendar-today"
@@ -122,10 +58,7 @@ export default class ScheduleScreen extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              this.setState({
-                ...this.state,
-                currentWeek: currentWeek.add(-1, "weeks"),
-              });
+              this.setState({ currentWeek: currentWeek.add(-1, "weeks") });
             }}
           >
             <MaterialCommunityIcons name="arrow-left" color="white" size={30} />
@@ -146,15 +79,121 @@ export default class ScheduleScreen extends Component {
             />
           </TouchableOpacity>
         </View>
-        {daysSelectorContianer()}
+        {this.daysSelectorContianer()}
         <View style={styles.box}>
           <Text style={styles.title}>Schedule</Text>
-          <ClassesOnDay classes={classes} styles={styles.Classes}/>
+          <ClassesOnDay
+            isLoading={isLoading}
+            classes={classes}
+            styles={styles.Classes}
+            message={message}
+          />
         </View>
       </LinearGradient>
     );
   }
+
+  daysSelectorContianer = () => {
+    var week_start = this.state.currentWeek.clone().startOf("week");
+    return (
+      <View
+        style={{
+          justifyContent: "space-evenly",
+          flexDirection: "row",
+          padding: 15,
+        }}
+      >
+        <SingleDaySelector day={week_start.clone()} onSelect={this.selectDay} />
+        <SingleDaySelector
+          day={week_start.add(1, "days").clone()}
+          onSelect={this.selectDay}
+        />
+        <SingleDaySelector
+          day={week_start.add(1, "days").clone()}
+          onSelect={this.selectDay}
+        />
+        <SingleDaySelector
+          day={week_start.add(1, "days").clone()}
+          onSelect={this.selectDay}
+        />
+        <SingleDaySelector
+          day={week_start.add(1, "days").clone()}
+          onSelect={this.selectDay}
+        />
+        <SingleDaySelector
+          day={week_start.add(1, "days").clone()}
+          onSelect={this.selectDay}
+        />
+        <SingleDaySelector
+          day={week_start.add(1, "days").clone()}
+          onSelect={this.selectDay}
+        />
+      </View>
+    );
+  };
+
+  componentDidMount() {
+    this.selectDay(moment());
+  }
+
+  selectDay = async (moment) => {
+    this.setState({ isLoading: true });
+    try {
+      let formdata = new FormData();
+
+      formdata.append("icsUrl", this.props.url);
+      formdata.append("Year", moment.year());
+      formdata.append("Month", moment.month() + 1);
+      formdata.append("Day", moment.date());
+
+      const response = await fetch(
+        "http://miranda.caslab.queensu.ca/GetTodaysCourses",
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          body: formdata,
+        }
+      );
+
+      const json = await response.json();
+
+      var i = 1;
+
+      var classes = [];
+      var c;
+      for (var name of Object.keys(json)) {
+        c = new SchoolClass(
+          name,
+          json[name].Starts,
+          json[name].Ends,
+          json[name].Location
+        );
+        classes.push({ id: i.toString(), schoolClass: c });
+        i++;
+      }
+      if (classes.length == 0) {
+        this.setState({
+          isLoading: false,
+          message: "You have no classes today!",
+        });
+      } else {
+        this.setState({ isLoading: false });
+      }
+      this.props.dispatch(updateClasses(classes));
+    } catch (e) {
+      this.setState({
+        isLoading: false,
+        message: "Please check your internet connection or try again later.",
+      });
+      console.log(e);
+    }
+  };
 }
+
+export default connect(mapStateToProps)(ScheduleScreen);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -182,12 +221,6 @@ const styles = StyleSheet.create({
     color: Colors.header,
     paddingRight: 10,
     paddingLeft: 10,
-  },
-  day: {
-    fontFamily: "poppins-medium",
-    fontSize: 20,
-    color: Colors.header,
-    paddingBottom: 10,
   },
   Classes: {
     flex: 1,

@@ -13,10 +13,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { updateLogin } from "./data/redux/user";
 import Colors from "./constants/Colors";
 
-const mapStateToProps = (state) => {
-  return {};
-};
-
 class Login extends React.Component {
   state = {
     email: "",
@@ -101,7 +97,7 @@ class Login extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(Login);
+export default connect(null)(Login);
 
 const styles = StyleSheet.create({
   container: {
