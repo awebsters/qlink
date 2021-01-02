@@ -1,35 +1,21 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
-
+import { View, Text, StyleSheet, FlatList, ActivityIndicator} from "react-native";
 import Colors from "../constants/Colors";
 export default class FoodMenu extends Component {
-  state = {
-    data: [
-      {
-        BreakFast: [
-          { Pastry: ["Croissant", "Muffins"] },
-          { Classics: ["Eggs", "Ham", "Potatoes"] },
-          { Entree: ["Soup", "Crackers", "Bread"] },
-          { Entree: ["Soup", "Crackers", "Bread"] },
-        ],
-      },
-      {
-        Lunch: [
-          { Pastry: ["Croissant", "Muffins"] },
-          { Classics: ["Eggs", "Ham", "Potatoes"] },
-          { Entree: ["Soup", "Crackers", "Bread"] },
-        ],
-      },
-      {
-        Dinner: [
-          { Pastry: ["Croissant", "Muffins"] },
-          { Classics: ["Eggs", "Ham", "Potatoes"] },
-          { Entree: ["Soup", "Crackers", "Bread"] },
-        ],
-      },
-    ],
-    Menu: "Leonard",
-  };
+
+  state = {data: [], isLoading: true}
+
+  componentDidMount() {
+    fetch('http://miranda.caslab.queensu.ca/GetMeals')
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({ data: json.data });
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        this.setState({ isLoading: false });
+      });
+  }
 
   meal(item) {
     var nam = Object.keys(item)[0];
@@ -43,25 +29,28 @@ export default class FoodMenu extends Component {
         <View style={styles.boxText}>
           <FlatList
             ListHeaderComponent={<View style={{ margin: 6 }}></View>}
+            ListFooterComponent={<View style={{ margin: 12 }}></View>}
+            ItemSeparatorComponent={() => <View style={styles.lineStyle}></View>}
             data={item[nam]}
             renderItem={({ item }) => (
               <View>
                 <View
                   style={{
                     flexDirection: "row",
-                    justifyContent: "flex-start",
                     paddingLeft: 10,
+                    alignItems: "left",
+                    justifyContent: "space-between"
                   }}
                 >
-                  <Text style={styles.menuTitle}>{Object.keys(item)[0]}</Text>
+                  <Text style={styles.menuTitle} adjustsFontSizeToFit={true}>{Object.keys(item)[0]}</Text>
                   <FlatList
                     data={item[Object.keys(item)[0]]}
                     renderItem={({ item }) => (
-                      <Text style={styles.menu}>{item}</Text>
+                      <Text style ={styles.menu}>{item}</Text>
                     )}
                   />
                 </View>
-                <View style={styles.lineStyle}></View>
+                
               </View>
             )}
           />
@@ -69,22 +58,27 @@ export default class FoodMenu extends Component {
       </View>
     );
   }
-
+  
   render() {
-    const { data } = this.state;
-    return (
-      <View style={{ flex: 1 }}>
-        <FlatList
-          ItemSeparatorComponent={() => <View style={{ margin: 10 }} />}
-          contentContainerStyle={{ padding: 40 }}
-          vertical={true}
-          data={data}
-          renderItem={({ item }) => this.meal(item)}
-        />
-      </View>
-    );
+
+    const { data, isLoading} = this.state;
+
+      return (
+
+        <View style={{ flex: 1, justifyContent: "center"}}>
+          {isLoading ? <ActivityIndicator/> : (
+            <FlatList
+              ItemSeparatorComponent={() => <View style={{ margin: 10 }} />}
+              contentContainerStyle={{ padding: 40 }}
+              vertical={true}
+              data={data[this.props.option]}
+              renderItem={({ item }) => this.meal(item)}
+            />
+          )}
+        </View>
+      );
+      }
   }
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -101,8 +95,10 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   title: {
+    textAlignVertical: "top",
+    textAlign: "auto",
     width: 90,
-    bottom: "34%",
+    marginTop:40,
     fontSize: 18,
     fontFamily: "poppins-regular",
     color: "white",
@@ -115,23 +111,33 @@ const styles = StyleSheet.create({
   },
   menuTitle: {
     textAlign: "left",
-    left: "10%",
-    fontSize: 17,
+    left: "5%",
     fontFamily: "poppins-medium",
     color: Colors.header,
-    flex: 0.5,
+    width:80,
+    height:60,
+    position: "absolute"
+    
   },
   menu: {
     textAlign: "left",
     fontSize: 14,
     fontFamily: "poppins-regular",
     color: Colors.header,
-    flex: 1,
+    marginLeft: 90,
+
+
+    
   },
   lineStyle: {
     borderWidth: 0.5,
     borderColor: Colors.header,
-    margin: 10,
+    marginTop:25,
+    margin: 14,
     opacity: 0.2,
+  },
+  loading: {
+    flex: 1,
+    justifyContent: "center"
   },
 });

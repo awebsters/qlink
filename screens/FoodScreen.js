@@ -5,7 +5,36 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import FoodMenu from "../components/FoodMenu";
 import MealPlan from "../components/MealPlan";
 
-export default function FoodScreen() {
+export default class FoodScreen extends React.Component{
+
+  constructor(props) {
+    super(props);     
+    this.state = {
+      option: "Leonard"
+    }; 
+}
+
+_renderDot(name) {
+  if (this.state.option == name) {
+      return (
+              <View>
+                <Text style={styles.dot}>{'\u2B24'}</Text>
+              </View>
+      );
+  } else {
+      return null;
+  }
+}
+
+  onButtonPress = (name) => {
+    this.setState({
+      option:name
+    });
+    
+  }
+
+  render(){
+
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -39,19 +68,34 @@ export default function FoodScreen() {
               style={{
                 flexDirection: "row",
                 justifyContent: "center",
+                alignItems: "center",
                 fontFamily: "poppins-light",
+                
               }}
             >
-              <Button color={Colors.header} title="Leonard" />
-              <Button color={Colors.header} title="Ban Righ" />
-              <Button color={Colors.header} title="Jean Royce" />
+               <View
+              style={{flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+              <Button color={Colors.header} onPress={() => this.onButtonPress("Leonard")} title="Leonard" />
+              {this._renderDot("Leonard")}
+              </View>
+              <View
+              style={{flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+              <Button color={Colors.header} onPress={() => this.onButtonPress("Ban_Righ")} title="Ban Righ" />
+              {this._renderDot("Ban_Righ")}
+              </View>
+              <View
+              style={{flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+              <Button color={Colors.header} onPress={() => this.onButtonPress("Jean_Royce")} title="Jean Royce" />
+              {this._renderDot("Jean_Royce")}
+              </View>
             </View>
-            <FoodMenu />
+            <FoodMenu option={this.state.option}/>
           </View>
         </View>
       </LinearGradient>
     </View>
   );
+}
 }
 
 const styles = StyleSheet.create({
@@ -65,12 +109,13 @@ const styles = StyleSheet.create({
   underline: {
     backgroundColor: "#E1B2FF",
     height: 4,
-    flex: 0.48,
+    width:170
   },
   menuUnderline: {
     backgroundColor: "#E1B2FF",
     height: 4,
-    flex: 0.2,
+    width:72,
+    // flex: 0.19,
   },
   header: {
     fontFamily: "poppins-medium",
@@ -100,4 +145,10 @@ const styles = StyleSheet.create({
   content_section: {
     paddingTop: 20,
   },
+  dot: {
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    fontSize: 10,
+    color: Colors.header
+  }
 });
