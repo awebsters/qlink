@@ -2,13 +2,17 @@ import React, { Component } from "react";
 import { ActivityIndicator } from "react-native";
 import { FlatList } from "react-native";
 import { View, Text, StyleSheet, Image } from "react-native";
+import moment from "moment";
 
 import Colors from "../constants/Colors";
 export default class ClassesOnDay extends Component {
   state = {};
 
   Item(item) {
-    const { code, time, location } = item.schoolClass;
+    const { code, time, location, endTime } = item.schoolClass;
+    let codeSplit = code.split(" ");
+    console.log(codeSplit);
+    let displayCode = codeSplit[0] + " " + codeSplit[1];
     return (
       <View style={styles.container}>
         <View style={styles.picture}>
@@ -18,12 +22,16 @@ export default class ClassesOnDay extends Component {
           />
         </View>
         <View style={styles.info}>
-          <Text style={styles.title}>{code}</Text>
-          <Text style={styles.time}>
-            {time}
-            {"\n"}
-            {location}
-          </Text>
+          <Text style={styles.title}>{displayCode}</Text>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.time}>
+              {moment(time).format("HH:mm") +
+                " - " +
+                moment(endTime).format("HH:mm")}
+              {"\n"}
+              {location}
+            </Text>
+          </View>
         </View>
       </View>
     );
@@ -66,21 +74,21 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   info: {
-    flex: 3,
+    flex: 2,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
     marginLeft: 5,
     marginRight: 5,
   },
   title: {
     fontFamily: "poppins-medium",
-    fontSize: 18,
+    fontSize: 20,
     color: Colors.paragraph,
   },
   time: {
+    paddingLeft: 10,
     fontFamily: "poppins-regular",
-    fontSize: 14,
+    fontSize: 15,
     color: Colors.paragraph,
   },
 });

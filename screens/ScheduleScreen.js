@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React, { useState, Component } from "react";
+import React, { Component } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import moment from "moment";
@@ -157,7 +157,12 @@ class ScheduleScreen extends Component {
       var classes = [];
       var c;
       for (var name of Object.keys(json)) {
-        c = new SchoolClass(name, json[name].Starts, json[name].Location);
+        c = new SchoolClass(
+          name,
+          json[name].Starts,
+          json[name].Ends,
+          json[name].Location
+        );
         classes.push({ id: i.toString(), schoolClass: c });
         i++;
       }
