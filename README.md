@@ -35,9 +35,17 @@ The priorities, in decending importance, are:
 Details front-end and back-end designs and technologies used for implementation.
 
 ### Front-end Design
+The team used Adobe XD to create multiple prototypes of the front-end UI/UX. This program allowed us to include basic user inputs/interactions to perfect the design that was created through extensive research into current related competitive offering and popular design standards like Google's Material Design.
+
+![Basic user interaction lifecycle](docs/front-end-basic-interaction.png)
+
+**Diagram 1.1** - A users basic high level navigation around the application 
+
+
 
 ### Back-end Design
 
 ### Implementation
+
 
 
