@@ -173,13 +173,14 @@ class ScheduleScreen extends Component {
         classes.push({ id: i.toString(), schoolClass: c });
         i++;
       }
+
       if (classes.length == 0) {
         this.setState({
           isLoading: false,
           message: "You have no classes today!",
         });
       } else {
-        this.setState({ isLoading: false });
+        this.setState({ isLoading: false, message: "" });
       }
       this.props.dispatch(updateClasses(classes));
     } catch (e) {

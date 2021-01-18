@@ -11,7 +11,7 @@ export default class ClassesOnDay extends Component {
   Item(item) {
     const { code, time, location, endTime } = item.schoolClass;
     let codeSplit = code.split(" ");
-    console.log(codeSplit);
+
     let displayCode = codeSplit[0] + " " + codeSplit[1];
     return (
       <View style={styles.container}>
