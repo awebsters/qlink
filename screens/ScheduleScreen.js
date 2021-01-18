@@ -10,7 +10,6 @@ import ClassesOnDay from "../components/ClassesOnDay";
 import SingleDaySelector from "../components/SingleDaySelector";
 import { updateClasses, updateDay } from "../data/redux/schedule";
 import SchoolClass from "../data/model/SchoolClass";
-import { isLoaded } from "expo-font";
 
 const mapStateToProps = (state) => {
   return {
