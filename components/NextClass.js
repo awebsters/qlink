@@ -29,7 +29,10 @@ class NextClass extends Component {
       return <Text>{message}</Text>;
     }
 
-    const { code, name, time, room } = nextClass;
+    const { code, name, time, endTime, location } = nextClass;
+
+    let codeSplit = code.split(" ");
+    let displayCode = codeSplit[0] + " " + codeSplit[1];
 
     return (
       <View style={style}>
@@ -41,10 +44,14 @@ class NextClass extends Component {
             />
           </View>
           <View style={styles.info}>
-            <Text style={styles.title}>{code}</Text>
-            <Text style={styles.subtitle}>{name}</Text>
-            <Text style={styles.time}>{time}</Text>
-            <Text style={styles.room}>{room}</Text>
+            <Text style={styles.title}>{displayCode}</Text>
+            <Text style={styles.time}>
+              {moment(time).format("HH:mm") +
+                " - " +
+                moment(endTime).format("HH:mm")}
+              {"\n"}
+            </Text>
+            <Text style={styles.room}>{location}</Text>
           </View>
         </View>
       </View>
@@ -59,10 +66,8 @@ class NextClass extends Component {
     try {
       let formdata = new FormData();
 
-      const current = moment()
-        .add(moment().utcOffset(), "minutes")
-        .add(2, "days");
-      console.log(current);
+      const current = moment();
+
       formdata.append("icsUrl", this.props.url);
       formdata.append("Year", current.year());
       formdata.append("Month", current.month() + 1);
@@ -111,7 +116,6 @@ class NextClass extends Component {
         this.setState({ isLoading: false, message: "", nextClass: nextClass });
       }
     } catch (e) {
-      console.log(e);
       this.setState({
         isLoading: false,
         message: "Please check your internet connection or try again later.",
