@@ -1,23 +1,33 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, ActivityIndicator } from "react-native";
+import { connect } from "react-redux";
+import moment from "moment";
 
 import Colors from "../constants/Colors";
+import SchoolClass from "../data/model/SchoolClass";
 
 const mapStateToProps = (state) => {
   return {
     url: state.user.schedule_url,
-    nextClass: state.courses.classes,
   };
 };
 
 class NextClass extends Component {
   state = {
+    isLoading: true,
     message: "",
+    nextClass: null,
   };
 
   render() {
-    const { message } = this.state;
-    const { style, nextClass } = this.props;
+    const { isLoading, message, nextClass } = this.state;
+    const { style } = this.props;
+
+    if (isLoading) {
+      return <ActivityIndicator />;
+    } else if (message) {
+      return <Text>{message}</Text>;
+    }
 
     const { code, name, time, room } = nextClass;
 
@@ -46,14 +56,17 @@ class NextClass extends Component {
   }
 
   loadCourses = async () => {
-    this.setState({ isLoading: true });
     try {
       let formdata = new FormData();
 
+      const current = moment()
+        .add(moment().utcOffset(), "minutes")
+        .add(2, "days");
+      console.log(current);
       formdata.append("icsUrl", this.props.url);
-      formdata.append("Year", moment.year());
-      formdata.append("Month", moment.month() + 1);
-      formdata.append("Day", moment.date());
+      formdata.append("Year", current.year());
+      formdata.append("Month", current.month() + 1);
+      formdata.append("Day", current.date());
 
       const response = await fetch(
         "http://miranda.caslab.queensu.ca/GetTodaysCourses",
@@ -68,30 +81,37 @@ class NextClass extends Component {
 
       const json = await response.json();
 
-      var i = 1;
+      var nextClass = null;
 
-      var classes = [];
-      var c;
       for (var name of Object.keys(json)) {
-        c = new SchoolClass(
-          name,
-          json[name].Starts,
-          json[name].Ends,
-          json[name].Location
-        );
-        classes.push({ id: i.toString(), schoolClass: c });
-        i++;
+        let start = moment(json[name].Starts);
+        let difference = moment.duration(start.diff(current)).asHours();
+
+        if (current.isAfter(start)) {
+          continue;
+        } else if (
+          nextClass == null ||
+          difference < moment.duration(nextClass.start.diff(current)).asHours()
+        ) {
+          nextClass = new SchoolClass(
+            name,
+            json[name].Starts,
+            json[name].Ends,
+            json[name].Location
+          );
+        }
       }
-      if (classes.length == 0) {
+      if (nextClass == null) {
         this.setState({
           isLoading: false,
-          message: "You have no classes today!",
+          message: "You have no more classes!",
+          nextClass: null,
         });
       } else {
-        this.setState({ isLoading: false, message: "" });
+        this.setState({ isLoading: false, message: "", nextClass: nextClass });
       }
-      this.props.dispatch(updateClasses(classes));
     } catch (e) {
+      console.log(e);
       this.setState({
         isLoading: false,
         message: "Please check your internet connection or try again later.",
