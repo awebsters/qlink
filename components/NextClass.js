@@ -3,17 +3,23 @@ import { View, Text, StyleSheet, Image } from "react-native";
 
 import Colors from "../constants/Colors";
 
-export default class NextClass extends Component {
+const mapStateToProps = (state) => {
+  return {
+    url: state.user.schedule_url,
+    nextClass: state.courses.classes,
+  };
+};
+
+class NextClass extends Component {
   state = {
-    code: "CISC220",
-    name: "System Level Programming",
-    time: "12:30 pm - 1:30 pm",
-    room: "Kin and Health 100",
+    message: "",
   };
 
   render() {
-    const { code, name, time, room } = this.state;
-    const { style } = this.props;
+    const { message } = this.state;
+    const { style, nextClass } = this.props;
+
+    const { code, name, time, room } = nextClass;
 
     return (
       <View style={style}>
@@ -34,7 +40,68 @@ export default class NextClass extends Component {
       </View>
     );
   }
+
+  componentDidMount() {
+    this.loadCourses();
+  }
+
+  loadCourses = async () => {
+    this.setState({ isLoading: true });
+    try {
+      let formdata = new FormData();
+
+      formdata.append("icsUrl", this.props.url);
+      formdata.append("Year", moment.year());
+      formdata.append("Month", moment.month() + 1);
+      formdata.append("Day", moment.date());
+
+      const response = await fetch(
+        "http://miranda.caslab.queensu.ca/GetTodaysCourses",
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          body: formdata,
+        }
+      );
+
+      const json = await response.json();
+
+      var i = 1;
+
+      var classes = [];
+      var c;
+      for (var name of Object.keys(json)) {
+        c = new SchoolClass(
+          name,
+          json[name].Starts,
+          json[name].Ends,
+          json[name].Location
+        );
+        classes.push({ id: i.toString(), schoolClass: c });
+        i++;
+      }
+      if (classes.length == 0) {
+        this.setState({
+          isLoading: false,
+          message: "You have no classes today!",
+        });
+      } else {
+        this.setState({ isLoading: false, message: "" });
+      }
+      this.props.dispatch(updateClasses(classes));
+    } catch (e) {
+      this.setState({
+        isLoading: false,
+        message: "Please check your internet connection or try again later.",
+      });
+      console.log(e);
+    }
+  };
 }
+
+export default connect(mapStateToProps)(NextClass);
 
 const styles = StyleSheet.create({
   box: {

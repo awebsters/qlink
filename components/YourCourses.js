@@ -27,58 +27,6 @@ const mapStateToProps = (state) => {
 
 class YourCourses extends Component {
   state = {
-    data: [
-      {
-        id: "1",
-        course: {
-          image: "https://picsum.photos/300/300",
-          code: "COMM 200",
-          location: "Goodes RM 108",
-          days: ["Monday", "Tuesday"],
-          times: ["6:30pm - 9:30pm", "9:30pm - 10:30pm"],
-        },
-      },
-      {
-        id: "2",
-        course: {
-          image: "https://picsum.photos/300/300",
-          code: "CISC 204",
-          location: "Goodes RM 108",
-          days: ["Monday", "Tuesday"],
-          times: ["6:30pm - 9:30pm", "9:30pm - 10:30pm"],
-        },
-      },
-      {
-        id: "3",
-        course: {
-          image: "https://picsum.photos/300/300",
-          code: "ARTH 253",
-          location: "Goodes RM 108",
-          days: ["Monday", "Tuesday"],
-          times: ["6:30pm - 9:30pm", "9:30pm - 10:30pm"],
-        },
-      },
-      {
-        id: "4",
-        course: {
-          image: "https://picsum.photos/300/300",
-          code: "PHIL 101",
-          location: "Goodes RM 108",
-          days: ["Monday", "Tuesday"],
-          times: ["6:30pm - 9:30pm", "9:30pm - 10:30pm"],
-        },
-      },
-      {
-        id: "5",
-        course: {
-          image: "https://picsum.photos/300/300",
-          code: "CISC 253",
-          location: "Goodes RM 108",
-          days: ["Monday", "Tuesday"],
-          times: ["6:30pm - 9:30pm", "9:30pm - 10:30pm"],
-        },
-      },
-    ],
     isModalVisible: false,
     selectedItem: null,
   };
@@ -109,8 +57,8 @@ class YourCourses extends Component {
   }
 
   render() {
-    const { data, selectedItem, isModalVisible } = this.state;
-    const { style } = this.props;
+    const { selectedItem, isModalVisible } = this.state;
+    const { style, classes } = this.props;
 
     return (
       <View style={style}>
@@ -124,7 +72,7 @@ class YourCourses extends Component {
 
         <FlatList
           horizontal={true}
-          data={this.props.classes}
+          data={classes}
           renderItem={({ item }) => this.Item(item)}
         />
       </View>
@@ -171,7 +119,7 @@ class YourCourses extends Component {
           message: "You aren't taking any classes!",
         });
       } else {
-        this.setState({ isLoading: false });
+        this.setState({ isLoading: false, message: "" });
       }
 
       this.props.dispatch(updateCourses(classes));
