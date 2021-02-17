@@ -178,7 +178,7 @@ class ScheduleScreen extends Component {
           message: "You have no classes today!",
         });
       } else {
-        this.setState({ isLoading: false });
+        this.setState({ isLoading: false, message: "" });
       }
       this.props.dispatch(updateClasses(classes));
     } catch (e) {
