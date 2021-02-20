@@ -1,19 +1,38 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, ActivityIndicator } from "react-native";
+import { connect } from "react-redux";
+import moment from "moment";
 
 import Colors from "../constants/Colors";
+import SchoolClass from "../data/model/SchoolClass";
 
-export default class NextClass extends Component {
+const mapStateToProps = (state) => {
+  return {
+    url: state.user.schedule_url,
+  };
+};
+
+class NextClass extends Component {
   state = {
-    code: "CISC220",
-    name: "System Level Programming",
-    time: "12:30 pm - 1:30 pm",
-    room: "Kin and Health 100",
+    isLoading: true,
+    message: "",
+    nextClass: null,
   };
 
   render() {
-    const { code, name, time, room } = this.state;
+    const { isLoading, message, nextClass } = this.state;
     const { style } = this.props;
+
+    if (isLoading) {
+      return <ActivityIndicator />;
+    } else if (message) {
+      return <Text>{message}</Text>;
+    }
+
+    const { code, name, time, endTime, location } = nextClass;
+
+    let codeSplit = code.split(" ");
+    let displayCode = codeSplit[0] + " " + codeSplit[1];
 
     return (
       <View style={style}>
@@ -25,16 +44,88 @@ export default class NextClass extends Component {
             />
           </View>
           <View style={styles.info}>
-            <Text style={styles.title}>{code}</Text>
-            <Text style={styles.subtitle}>{name}</Text>
-            <Text style={styles.time}>{time}</Text>
-            <Text style={styles.room}>{room}</Text>
+            <Text style={styles.title}>{displayCode}</Text>
+            <Text style={styles.time}>
+              {moment(time).format("HH:mm") +
+                " - " +
+                moment(endTime).format("HH:mm")}
+              {"\n"}
+            </Text>
+            <Text style={styles.room}>{location}</Text>
           </View>
         </View>
       </View>
     );
   }
+
+  componentDidMount() {
+    this.loadCourses();
+  }
+
+  loadCourses = async () => {
+    try {
+      let formdata = new FormData();
+
+      const current = moment();
+
+      formdata.append("icsUrl", this.props.url);
+      formdata.append("Year", current.year());
+      formdata.append("Month", current.month() + 1);
+      formdata.append("Day", current.date());
+
+      const response = await fetch(
+        "http://miranda.caslab.queensu.ca/GetTodaysCourses",
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          body: formdata,
+        }
+      );
+
+      const json = await response.json();
+
+      var nextClass = null;
+
+      for (var name of Object.keys(json)) {
+        let start = moment(json[name].Starts);
+        let difference = moment.duration(start.diff(current)).asHours();
+
+        if (current.isAfter(start)) {
+          continue;
+        } else if (
+          nextClass == null ||
+          difference < moment.duration(nextClass.start.diff(current)).asHours()
+        ) {
+          nextClass = new SchoolClass(
+            name,
+            json[name].Starts,
+            json[name].Ends,
+            json[name].Location
+          );
+        }
+      }
+      if (nextClass == null) {
+        this.setState({
+          isLoading: false,
+          message: "You have no more classes!",
+          nextClass: null,
+        });
+      } else {
+        this.setState({ isLoading: false, message: "", nextClass: nextClass });
+      }
+    } catch (e) {
+      this.setState({
+        isLoading: false,
+        message: "Please check your internet connection or try again later.",
+      });
+      console.log(e);
+    }
+  };
 }
+
+export default connect(mapStateToProps)(NextClass);
 
 const styles = StyleSheet.create({
   box: {

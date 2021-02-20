@@ -16,7 +16,6 @@ export const updateDay = (day) => ({
 const initialState = {
   classes: [],
   selectedDay: moment(),
-  test: "test",
 };
 
 export default (state = initialState, action) => {

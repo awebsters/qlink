@@ -7,14 +7,17 @@ import {
   Image,
   TouchableWithoutFeedback,
 } from "react-native";
+import moment from "moment";
 
 import Colors from "../../constants/Colors";
-
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default class CourseModal extends Component {
   render() {
     const { selectedItem } = this.props;
+
+    let codeSplit = selectedItem.code.split(" ");
+    let displayCode = codeSplit[0] + " " + codeSplit[1];
 
     return (
       <Modal
@@ -45,7 +48,7 @@ export default class CourseModal extends Component {
                     paddingBottom: 15,
                   }}
                 >
-                  <Text style={styles.title}>{selectedItem.code}</Text>
+                  <Text style={styles.title}>{displayCode}</Text>
                   <View
                     style={{
                       flexDirection: "row",
@@ -59,15 +62,15 @@ export default class CourseModal extends Component {
                 <View style={styles.times}>
                   <MaterialCommunityIcons name="alarm" size={25} />
                   <Text style={styles.info_text}>
-                    {selectedItem.days.join("\n")}
+                    {Object.keys(selectedItem.Dates).join("\n")}
                   </Text>
                   <Text style={styles.info_text}>
-                    {selectedItem.times.join("\n")}
+                    {this.buildTimesString(selectedItem.Dates)}
                   </Text>
                 </View>
                 <View style={styles.location}>
                   <MaterialCommunityIcons name="map-marker" size={25} />
-                  <Text style={styles.info_text}>{selectedItem.location}</Text>
+                  <Text style={styles.info_text}>{selectedItem.Location}</Text>
                 </View>
               </View>
             </View>
@@ -76,6 +79,16 @@ export default class CourseModal extends Component {
       </Modal>
     );
   }
+
+  buildTimesString = (dateInfo) => {
+    var times = "";
+    for (var days of Object.keys(dateInfo)) {
+      let start = moment(dateInfo[days][0]).format("HH:mm");
+      let end = moment(dateInfo[days][1]).format("HH:mm");
+      times += start + " - " + end + "\n";
+    }
+    return times;
+  };
 }
 
 const styles = StyleSheet.create({

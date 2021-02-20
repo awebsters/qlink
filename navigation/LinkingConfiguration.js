@@ -11,7 +11,6 @@ export default {
       screens: {
         Home: "home",
         Schedule: "schedule",
-        Map: "map",
         Food: "food",
       },
     },

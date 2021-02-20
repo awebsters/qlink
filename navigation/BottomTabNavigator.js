@@ -3,7 +3,6 @@ import React from "react";
 
 import HomeScreen from "../screens/HomeScreen";
 import ScheduleScreen from "../screens/ScheduleScreen";
-import MapScreen from "../screens/MapScreen";
 import FoodScreen from "../screens/FoodScreen";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
@@ -44,15 +43,6 @@ export default function BottomTabNavigator({ navigation, route }) {
               color={color}
               size={size}
             />
-          ),
-        }}
-      />
-      <BottomTab.Screen
-        name="Map"
-        component={MapScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="map" color={color} size={size} />
           ),
         }}
       />

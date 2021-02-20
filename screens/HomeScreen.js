@@ -14,13 +14,6 @@ import { useDispatch } from "react-redux";
 import { ScrollView } from "react-native-gesture-handler";
 import moment from "moment";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import {
-  Menu,
-  MenuProvider,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-} from "react-native-popup-menu";
 
 import Colors from "../constants/Colors";
 import NextClass from "../components/NextClass";
@@ -33,10 +26,7 @@ export default function HomeScreen() {
   logoutUser = () => {
     dispatch(updateLogin("", ""));
   };
-  settings = () => {
-    console.log("Settings clicked placeholder");
-  };
-
+  
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -52,14 +42,6 @@ export default function HomeScreen() {
               justifyContent: "flex-end",
             }}
           >
-            <TouchableOpacity style={{ padding: 2 }} onPress={settings}>
-              <MaterialCommunityIcons
-                style={styles.headerButton}
-                name="settings"
-                color="black"
-                size={30}
-              />
-            </TouchableOpacity>
             <TouchableOpacity style={{ padding: 2 }} onPress={logoutUser}>
               <MaterialCommunityIcons
                 style={styles.headerButton}
