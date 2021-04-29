@@ -26,7 +26,7 @@ export default function HomeScreen() {
   logoutUser = () => {
     dispatch(updateLogin("", ""));
   };
-  
+
   return (
     <View style={styles.container}>
       <LinearGradient
